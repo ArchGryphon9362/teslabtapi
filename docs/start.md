@@ -2,7 +2,7 @@
 sidebar_position: 2
 ---
 
-# Authentication
+# Getting Started
 ## Whitelisting your key
 To begin working with the car's BLE API, you'll need to generate and whitelist your public key with the car.
 To do this, you'll need to first of all, generate an EC private key with the NISTP256 curve (aka secp256r1, and prime256v1), which you should store and keep safe, this key is used to sign all your message. From that, you'll need to generate a public key serialized to bytes in the DER format, and split it from the 27th byte to the end, where the first byte is 0x04, for now I'll call these `privateKey`, and `publicKey`. Next serialize an unsigned protobuf message from the VCSEC protobuf in the following layout:
@@ -11,7 +11,7 @@ UnsignedMessage {
 	WhitelistOperation {
 		addKeyToWhitelistAndAddPermissions {
 			key {
-				PublicKeyRaw: publicKey
+				PublicKeyRaw: <publicKey>
 			}
 			permission: WHITELISTKEYPERMISSION_LOCAL_DRIVE
 			permission: WHITELISTKEYPERMISSION_LOCAL_UNLOCK
@@ -28,7 +28,7 @@ You may add any other permissions as needed but these are the ones that let you 
 ```
 ToVCSEC {
 	signedMessage {
-		protobufMessageAsBytes: protoMsg
+		protobufMessageAsBytes: <protoMsg>
 		signatureType: SIGNATURE_TYPE_PRESENT_KEY
 	}
 }
@@ -73,7 +73,7 @@ ToVCSEC {
 		InformationRequest {
 			informationRequestType: INFORMATION_REQUEST_TYPE_GET_EPHEMERAL_PUBLIC_KEY
 			keyId {
-				publicKeySHA1: keyId
+				publicKeySHA1: <keyId>
 			}
 		{
 	}
@@ -87,6 +87,25 @@ FromVCSEC {
 	}
 }
 ```
-When you recieve it, it should be in the X9.62 UnencodedPoint format, with the NISTP256 format. Once you load it I'll call it `ephemeral_key`. What you now need to do is generate an AES secret from the car's ephemeral public key, and your secret key. Now you need to make a SHA1 of itand put the first 16 bytes in a variable which I'll call `shared_key`.
+When you recieve it, it should be in the X9.62 UnencodedPoint format, with the NISTP256 format. Once you load it I'll call it `ephemeral_key`. What you now need to do is generate an AES secret from the car's ephemeral public key, and your secret key. Now you need to make a SHA1 of itand put the first 16 bytes in a variable which I'll call `sharedKey`.
 ## Authenticating
-For the car to know that you are connected, and be able to send you requests, you need to authenticate yourself.
+For the car to know that you are connected, and to be able to send you requests, you need to authenticate yourself. To do so, you'll need to generate an authentication message in the following format:
+```
+UnsignedMessage {
+	authenticationResponse {
+		authenticationLevel: AUTHENTICATION_LEVEL_NONE
+	}
+}
+```
+Set a variable called `counter` to 1 (can be any number that hasn't been used as the counter for this key except 0), which you should increment each time after using. Now, you need to encrypt this message using the `sharedKey` in GCM mode, with a nonce which is a byte array of the counter split into 4 bytes. You should also seperate the encrypted/signed message into 2 variables, `encryptedMsg` (from bytes 0 to length - 16), and `msgSignature` (from bytes length - 16 to length). Now you need to generate a message to send to the car:
+```
+ToVCSEC {
+	signedMessage {
+		protobufMessageAsBytes: <encryptedMsg>
+		signature: <msgSignature>
+		counter: <counter>
+		keyId: <keyId>
+	}
+}
+```
+Now serialize this message to bytes and pass it to the `prependLength` function, and send that to the car. Now as long as you stay connected to the car's BLE, your key will stay marked in the car as an active key.
