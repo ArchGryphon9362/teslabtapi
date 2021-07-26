@@ -91,7 +91,7 @@ module.exports = {
           sidebarPath: require.resolve('./sidebars.js'),
           // Please change this to your repo.
           editUrl:
-            'https://github.com/ArchGryphon9362/teslabtapi/edit/master/',
+            'https://github.com/ArchGryphon9362/teslabtapi/edit/main/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
