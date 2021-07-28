@@ -3,9 +3,9 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
-  title: 'Tesla BluetoothLE API',
+  title: 'Tesla BluetoothLE API (Unofficial)',
   tagline: 'The API documentation you\'ve all been waiting for 😃',
-  url: 'https://your-docusaurus-test-site.com',
+  url: 'https://teslabtapi.io',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -14,7 +14,7 @@ module.exports = {
   projectName: 'teslabtapi', // Usually your repo name.
   themeConfig: {
     navbar: {
-      title: 'Tesla BluetoothLE API',
+      title: 'Tesla BluetoothLE API (Unofficial)',
       logo: {
         alt: 'Site Logo',
         src: 'img/logo.svg',
@@ -33,7 +33,7 @@ module.exports = {
         },
       ],
     },
-    footer: {
+    /* footer: {
       style: 'dark',
       links: [
         {
@@ -77,7 +77,7 @@ module.exports = {
         },
       ],
       copyright: `Copyright © ${new Date().getFullYear()} Tesla BluetoothLE API. Built with Docusaurus.`,
-    },
+    }, */
     prism: {
       theme: lightCodeTheme,
       darkTheme: darkCodeTheme,

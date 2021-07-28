@@ -5,6 +5,7 @@ sidebar_position: 2
 # Getting Started
 ## Whitelisting your key
 To begin working with the car's BLE API, you'll need to generate and whitelist your public key with the car.
+
 To do this, you'll need to first of all, generate an EC private key with the NISTP256 curve (aka secp256r1, and prime256v1), which you should store and keep safe, this key is used to sign all your message. From that, you'll need to generate a public key serialized to bytes in the DER format, and split it from the 27th byte to the end, where the first byte is 0x04, for now I'll call these `privateKey`, and `publicKey`. Next serialize an unsigned protobuf message from the VCSEC protobuf in the following layout:
 ```
 UnsignedMessage {
@@ -109,3 +110,33 @@ ToVCSEC {
 }
 ```
 Now serialize this message to bytes and pass it to the `prependLength` function, and send that to the car. Now as long as you stay connected to the car's BLE, your key will stay marked in the car as an active key.
+## Authenticating for other things
+If you want to let the car do things automatically without sending messages to do things (i.e. like the Tesla App does when you're next to/inside the car), you can send it an authentication response of a higher level to give permission to do everything under and including that level, so say you are giving level unlock, you are only letting the car unlock, but say you give level drive you can unlock *or* drive, but not both. Also, everytime the car does something automatically, you'll need to send it a new auth request.
+
+All that you have to do is serialize and sign an auth message where the distance is optional, but if not entered will just automatically assume that you're next to/inside the car, which I'll call `signedAuthMsg`, and `signedAuthSign`:
+```
+UnsignedMessage {
+	AuthenticationResponse {
+		authenticationLevel: AUTHENTICATION_LEVEL_<LEVEL>
+		estimatedDistance: <distance>
+	}
+}
+```
+Once you sign that message, turn it into a ToVCSEC message like this:
+```
+ToVCSEC {
+	signedMessage {
+		protobufMessageAsBytes: <signedAuthMsg>
+		signature: <signedAuthSign>
+		counter: <counter>
+		keyId: <keyId>
+	}
+}
+```
+## Sending actions manually
+Say a user interacts with an app or needs to do something that can't be done automatically. In that case you need to send an RKE action. You can send those by making a message in the following format, signing it, prepending length, and sending it to the car like with any other signed message:
+```
+UnsignedMessage {
+	RKEAction_E: <any rke action>
+}
+```
