@@ -2,7 +2,7 @@
 sidebar_position: 3
 ---
 
-# ToVCSEC
+# ToVCSECMessage
 Type|Name|Description|Repeated?
 -|-|-|-
 [`SignedMessage`](other/signedmsg)|signedMessage|A signed message|no

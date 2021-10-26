@@ -6,7 +6,7 @@ sidebar_position: 2
 ## Whitelisting your key
 To begin working with the vehicle's BLE API, you'll need to generate and whitelist your public key with the vehicle.
 
-To do this, you'll need to first of all, generate an EC private key with the NISTP256 curve (aka secp256r1, and prime256v1), which you should store and keep safe, this key is used to sign all your message. From that, you'll need to generate a public key serialized to bytes in the DER format, and split it from the 27th byte to the end, where the first byte is 0x04, for now I'll call these `privateKey`, and `publicKey`. Next serialize an unsigned protobuf message from the VCSEC protobuf in the following layout:
+To do this, you'll need to first of all, generate an EC private key with the NISTP256 curve (aka secp256r1, and prime256v1), which you should store and keep safe, this key is used to sign all your message. From that, you'll need to generate a public key serialized to bytes in the X9.62 Uncompressed Point format (if done correctly, the first byte should always be 0x04), for now I'll call these `privateKey`, and `publicKey` respectively. Next serialize an unsigned protobuf message from the VCSEC protobuf in the following layout:
 ```
 UnsignedMessage {
 	WhitelistOperation {
@@ -25,9 +25,9 @@ UnsignedMessage {
 	}
 }
 ```
-You may add any other permissions as needed but these are the ones that let you unlock, and start the vehicle. I'll call the previously serialized message the `protoMsg`. Once you have it serialized to bytes, you need to make a ToVCSEC message of the following format:
+You may add any other permissions as needed but these are the ones that let you unlock, and start the vehicle. I'll call the previously serialized message the `protoMsg`. Once you have it serialized to bytes, you need to make a ToVCSECMessage message of the following format:
 ```
-ToVCSEC {
+ToVCSECMessage {
 	signedMessage {
 		protobufMessageAsBytes: <protoMsg>
 		signatureType: SIGNATURE_TYPE_PRESENT_KEY
@@ -46,9 +46,9 @@ Once you have serialized `protoMsg`, and prepended the length, send the message 
 UUID: 00000212-b2d1-43f0-9b88-960cebf8b91e
 Descriptor: 0x2901
 ```
-Whenever the vehicle responds, it should always respond with a FromVCSEC message, which after removing the first 2 bytes (which are the length of the message), you can decode. In this case the vehicle should respond with the following message:
+Whenever the vehicle responds, it should always respond with a FromVCSECMessage message, which after removing the first 2 bytes (which are the length of the message), you can decode. In this case the vehicle should respond with the following message:
 ```
-FromVCSEC {
+FromVCSECMessage {
 	commandStauts {
 		operationStatus: OPERATIONSTATUS_WAIT
 		signedMessageStatus {
@@ -58,7 +58,7 @@ FromVCSEC {
 ```
 Now tap an existing key card, and you should recieve the following message:
 ```
-FromVCSEC {
+FromVCSECMessage {
 	commandStatus {
 		signedMessageStatus {
 		}
@@ -72,9 +72,9 @@ To sign messages to send to the vehicle, you'll need to get the vehicle's epheme
 
 First of all you'll need to generate the key id, which I'll be calling `keyId`. You can generate that by doing a SHA1 digest of `publicKey`, and taking the first 4 bytes of the digest.
 
-Now that you have your key id, you'll need to request the vehicle's ephemeral key. You can do this by making a ToVCSEC message with the following layout:
+Now that you have your key id, you'll need to request the vehicle's ephemeral key. You can do this by making a ToVCSECMessage message with the following layout:
 ```
-ToVCSEC {
+ToVCSECMessage {
 	unsignedMessage {
 		InformationRequest {
 			informationRequestType: INFORMATION_REQUEST_TYPE_GET_EPHEMERAL_PUBLIC_KEY
@@ -87,7 +87,7 @@ ToVCSEC {
 ```
 You can serialize this message to bytes and put it into a variable which I'll call `getEphemeralBytes`. Now do `prependLength(getEphemeralBytes)`, and send the value returned to the vehicle. The vehicle should respond with a message which you need to decode. It should looks something like this:
 ```
-FromVCSEC {
+FromVCSECMessage {
 	sessionInfo {
 		publicKey: <vehicle's ephemeral key>
 	}
@@ -106,7 +106,7 @@ UnsignedMessage {
 ```
 Set a variable called `counter` to 1 (can be any number that hasn't been used as the counter for this key and must be >= 1), which you should increment each time after using. Now, you need to encrypt this message using the `sharedKey` in GCM mode, with a nonce of the `counter`, split into 4 bytes in big-endian, where the least significant byte is at the end. You should also seperate the encrypted/signed message into 2 variables, `encryptedMsg` (from bytes 0 to `length` - 16), and `msgSignature` (from bytes `length` - 16 to `length`). Now you need to generate a message to send to the vehicle:
 ```
-ToVCSEC {
+ToVCSECMessage {
 	signedMessage {
 		protobufMessageAsBytes: <encryptedMsg>
 		signature: <msgSignature>
@@ -129,9 +129,9 @@ UnsignedMessage {
 	}
 }
 ```
-Once you sign that message, I'll call it `signedAuthMsg`, and its signature `signedAuthSign`, and turn it into a ToVCSEC message like this, which you then serialize, prepend the length, and send to the vehicle:
+Once you sign that message, I'll call it `signedAuthMsg`, and its signature `signedAuthSign`, and turn it into a ToVCSECMessage message like this, which you then serialize, prepend the length, and send to the vehicle:
 ```
-ToVCSEC {
+ToVCSECMessage {
 	signedMessage {
 		protobufMessageAsBytes: <signedAuthMsg>
 		signature: <signedAuthSign>
@@ -149,4 +149,12 @@ UnsignedMessage {
 ```
 
 ## More Info
-For more info, you can begin looking at [ToVCSEC](tovcsec.md), and [FromVCSEC](fromvcsec.md) (don't forget, VCSEC, is the vehicle's secondary security system, so you send **To**VCSEC messages, and the vehicle sends you back **From**VCSEC messages).
+For more info, you can begin looking at [ToVCSECMessage](ToVCSECMessage.md), and [FromVCSECMessage](FromVCSECMessage.md).
+
+Don't forget, VCSEC, is the vehicle's secondary security system, so you send **To**VCSECMessage messages, and the vehicle sends you back **From**VCSECMessage messages.
+
+:::note
+There is only one exception to this rule, that is when you added your key as keyfob, in which case you would use FromKeyfobMessage instead of ToVCSECMessage, and ToKeyfobMessage instead of FromVCSECMessage.
+
+There is also an exception for tire pressure sensors, but I have absolutely no idea of how they work, and don't have time to research.
+:::
