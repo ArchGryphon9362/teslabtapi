@@ -2,7 +2,7 @@
 Option|Description
 -|-
 INFORMATION_REQUEST_TYPE_GET_STATUS|Returns a [`vehicleStatus`](../rcv/vehiclestatus) message
-INFORMATION_REQUEST_TYPE_GET_TOKEN|Returns the car's token, not sure what it is, but I believe it is for the card emulation service
+INFORMATION_REQUEST_TYPE_GET_TOKEN|Returns the car's token, ...
 INFORMATION_REQUEST_TYPE_GET_COUNTER|Returns the current crypto counter, can't seem to get it to work
 INFORMATION_REQUEST_TYPE_GET_EPHEMERAL_PUBLIC_KEY|Returns the car's ephemeral key, unknown expiration time
 INFORMATION_REQUEST_TYPE_GET_SESSION_DATA|Returns a [`SessionInfo`](../rcv/sessioninfo) message

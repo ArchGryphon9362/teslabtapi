@@ -7,5 +7,5 @@ Type|Name|Description|Repeated?
 [`PermissionChange`](permchange)|addPermissionsToPublicKey|Add permissions to an existing public key, must have the `CHANGE_PERMISSIONS` permission|no
 [`PermissionChange`](permchange)|removePermissionsFromPublicKey|Remove permissions from an existing public key, must have the `CHANGE_PERMISSIONS` permission|no
 [`PermissionChange`](permchange)|addKeyToWhitelistAndAddPermissions|Add a public key to whitelist and add permissions to it|no
-[`PermissionChange`](permchange)|updateKeyAndPermissions|Update public key and permissions on it|no
+[`PermissionChange`](permchange)|updateKeyAndPermissions|...|no
 [`KeyMetadata`](keymetadata)|metadataForKey|A key's metadata|no
