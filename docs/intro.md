@@ -10,6 +10,15 @@ Everybody ***can***, and is ***encouraged*** to clone this documentation's repos
 This documentation's repository can be found on the navigation bar, or [here](https://github.com/ArchGryphon9362/teslabtapi)
 :::
 
+:::note
+Using most of the following information requires knowledge in the following areas:
+- How cryptography works
+- End to end encryption
+- How to store private keys securely
+- How to use BluetoothLE
+- How to use Google's protocol buffers
+:::
+
 ## Get started
 
 First of all, you'll need the proto file which you can grab from [Github](https://gist.github.com/ArchGryphon9362/fc55736f5bb5f2b19c12f68abe0ed3f7).
