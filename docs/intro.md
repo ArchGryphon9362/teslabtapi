@@ -6,7 +6,7 @@ Hey, this is my unofficial Tesla BLE API.
 
 ## Get started
 
-First of all, you'll need the proto file which you can grab from [Github](https://gist.github.com/ArchGryphon9362/a75515a05ca92e8d5f1cf7d3c0dce0f0).
+First of all, you'll need the proto file which you can grab from [Github](https://gist.github.com/ArchGryphon9362/fc55736f5bb5f2b19c12f68abe0ed3f7).
 Next generate the source/header files for your respective language which you can find out how to do [here](https://developers.google.com/protocol-buffers/docs/overview#generating).
 
 Now, to begin, go to the [getting started](start) section.
