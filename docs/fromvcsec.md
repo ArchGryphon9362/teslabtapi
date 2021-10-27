@@ -8,10 +8,11 @@ Type|Name|Description|Repeated?
 [`VehicleStatus`](other/vehstatus)|vehicleStatus|The vehicle's closure (everything that has a latch) states and lock state|no
 [`SessionInfo`](other/sessioninfo)|sessionInfo|Info about the connection|no
 [`AuthenticationRequest`](other/authrequest)|authenticationRequest|A request from the vehicle for you to authenticate to a certain level|no
-[`CommandStatus`](other/cmdstatus)|commandStatus|Status of the previous command|no
+[`CommandStatus`](other/cmdstatus)|commandStatus|Status of the previously sent command|no
 [`PersonalizationInformation`](other/personinfo)|personalizationInformation|...|no
 [`WhitelistInfo`](other/wlinfo)|whitelistInfo|Information about all whitelisted keys|no
 [`WhitelistEntryInfo`](other/wlentryinfo)|whitelistEntryInfo|Information about a certain whitelisted key|no
+——————————|——————————|——————————|——————————
 [`VehicleInfo`](other/vehinfo)|vehicleInfo|The vehicle's VIN (Vehicle Identification Number)|no
 [`Capabilities`](other/capabilities)|capabilities|Whether the vehicle has the ability to open/close the charge port|no
 [`ExternalAuthStatus`](other/extauthstatus)|externalAuthStatus|...|no

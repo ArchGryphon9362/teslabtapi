@@ -2,7 +2,13 @@
 sidebar_position: 1
 ---
 # Intro
-Hey, this is my unofficial Tesla BLE API.
+:::warning
+This documentation was fully researched, and written, by a single person, that is me. This documentation may have some slight inaccuracies, and this documentation may not be fully complete as I didn't have too much time to try out sending every message to my car, and had to guess some bits to write for the documentation.
+
+Everybody ***can***, and is ***encouraged*** to clone this documentation's repository, modify any inaccurate bits, or add missing information, and create a pull request which will be reviewed and likely merged.
+
+This documentation's repository can be found on the navigation bar, or [here](https://github.com/ArchGryphon9362/teslabtapi)
+:::
 
 ## Get started
 

@@ -1,0 +1,8 @@
+# VehicleLockState_E
+
+Option|Description
+-|-
+VEHICLELOCKSTATE_UNLOCKED|Vehicle unlocked
+VEHICLELOCKSTATE_LOCKED|Vehicle locked
+VEHICLELOCKSTATE_INTERNAL_LOCKED|Vehicle locked from inside
+VEHICLELOCKSTATE_SELECTIVE_UNLOCKED|Vehicle partially locked

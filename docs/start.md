@@ -49,7 +49,7 @@ Descriptor: 0x2901
 Whenever the vehicle responds, it should always respond with a FromVCSECMessage message, which after removing the first 2 bytes (which are the length of the message), you can decode. In this case the vehicle should respond with the following message:
 ```
 FromVCSECMessage {
-	commandStauts {
+	commandStatus {
 		operationStatus: OPERATIONSTATUS_WAIT
 		signedMessageStatus {
 		}
