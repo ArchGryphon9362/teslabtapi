@@ -19,7 +19,7 @@ Type|Name|Description|Repeated?
 [`TPNotifyTrackerStats`](tpnotiftrckrstats)|TPNotifyTrackerStats|...|no
 [`TPNewSensorData`](tpnewsensdata)|TPNewSensorData|...|no
 [`TPLRDetection`](tplrdetect)|TPLRDetection|...|no
-[`ConnectionMetrics`](connmetrics)|connectionMetrics|Statistics on number of good/failed connections from the TPS to the car|no
+[`ConnectionMetrics`](connmetrics)|connectionMetrics|Statistics on number of good/failed connections from the TPS to the vehicle|no
 [`Activity_E`](../enums/activity_e)|deviceActivity|Device motion status|no
 [`PersonalizationInformation`](personinfo)|personalizationInformation|...|no
 
