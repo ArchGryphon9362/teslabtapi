@@ -5,7 +5,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 module.exports = {
   title: 'Tesla BluetoothLE API (Unofficial)',
   tagline: 'The API documentation you\'ve all been waiting for 😃',
-  url: 'https://teslabtapi.io',
+  url: 'https://teslabtapi.lexnastin.com',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -142,7 +142,7 @@ module.exports = {
       darkTheme: darkCodeTheme,
     },
     gtag: {
-      trackingID: 'G-4RSZY0PGHB',
+      trackingID: 'G-CLECDTCH6N',
       anonymizeIP: false,
     },
   },
