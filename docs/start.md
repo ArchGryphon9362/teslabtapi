@@ -58,10 +58,10 @@ FromVCSECMessage {
 }
 It should be received on the following indication charachteristic:
 ```
+```
 Serivce: 00000211-b2d1-43f0-9b88-960cebf8b91e
 UUID: 00000213-b2d1-43f0-9b88-960cebf8b91e
 Descriptor: 0x2901
-```
 ```
 Now tap an existing key card, and you should recieve the following message:
 ```
