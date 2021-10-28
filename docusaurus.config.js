@@ -9,16 +9,74 @@ module.exports = {
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
-  favicon: 'img/favicon.ico',
+  favicon: '/img/icon.svg',
   organizationName: 'ArchGryphon9362', // Usually your GitHub org/user name.
   projectName: 'teslabtapi', // Usually your repo name.
-  plugins: [require.resolve('docusaurus-lunr-search')],
+  plugins: [require.resolve('docusaurus-lunr-search'), [
+    '@docusaurus/plugin-pwa',
+    {
+      debug: false,
+      offlineModeActivationStrategies: [
+        'appInstalled',
+        'standalone',
+        'queryString',
+      ],
+      pwaHead: [
+        {
+          tagName: 'link',
+          rel: 'icon',
+          href: '/img/icon.svg',
+        },
+        {
+          tagName: 'link',
+          rel: 'manifest',
+          href: '/manifest.json',
+        },
+        {
+          tagName: 'meta',
+          name: 'theme-color',
+          content: 'rgb(232, 33, 39)',
+        },
+        {
+          tagName: 'meta',
+          name: 'apple-mobile-web-app-capable',
+          content: 'yes',
+        },
+        {
+          tagName: 'meta',
+          name: 'apple-mobile-web-app-status-bar-style',
+          content: '#000',
+        },
+        {
+          tagName: 'link',
+          rel: 'apple-touch-icon',
+          href: '/img/icon.svg',
+        },
+        {
+          tagName: 'link',
+          rel: 'mask-icon',
+          href: '/img/icon.svg',
+          color: 'rgb(232, 33, 39)',
+        },
+        {
+          tagName: 'meta',
+          name: 'msapplication-TileImage',
+          content: '/img/icon.svg',
+        },
+        {
+          tagName: 'meta',
+          name: 'msapplication-TileColor',
+          content: '#000',
+        },
+      ],
+    },
+  ],],
   themeConfig: {
     navbar: {
       title: 'Tesla BluetoothLE API (Unofficial)',
       logo: {
         alt: 'Site Logo',
-        src: 'img/logo.svg',
+        src: '/img/icon.svg',
       },
       items: [
         {
