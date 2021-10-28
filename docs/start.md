@@ -149,7 +149,7 @@ UnsignedMessage {
 ```
 
 ## More Info
-For more info, you can begin looking at [ToVCSECMessage](ToVCSECMessage.md), and [FromVCSECMessage](FromVCSECMessage.md).
+For more info, you can begin looking at [ToVCSECMessage](tovcsec), and [FromVCSECMessage](fromvcsec).
 
 Don't forget, VCSEC, is the vehicle's secondary security system, so you send **To**VCSECMessage messages, and the vehicle sends you back **From**VCSECMessage messages.
 

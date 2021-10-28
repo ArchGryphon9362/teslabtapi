@@ -8,7 +8,7 @@ Type|Name|Description|Repeated?
 [`WhitelistOperation`](wlop)|WhitelistOperation|A whitelist operation to say remove/add permissions or keys|no
 [`UpdaterResponse`](updaterres)|updaterResponse|...|no
 [`GenealogyResponse`](genres)|genealogyResponse|Made for keyfobs and TPS to tell the vehicle their serial and part number|no
-[`KeyMetadata`](keymd)|setMetaDataForKey|Sets metadata for a certain key|no
+[`KeyMetadata`](keymetadata)|setMetaDataForKey|Sets metadata for a certain key|no
 [`KeyfobInfo`](keyfobinfo)|keyfobInfo|Keyfob states such as temperature|no
 [`IMUState_E`](../enums/imustate_e)|IMUState|...|no
 [`NFCSEState`](nfcsestate)|nfcseState|...|no
