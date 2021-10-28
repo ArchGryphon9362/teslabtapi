@@ -25,6 +25,6 @@ Service|Description
 
 ### The car's communication version
     - UUID: 00000214-b2d1-43f0-9b88-960cebf8b91e
-    - Properties: INDICATE
+    - Properties: READ
     - Descriptors:
         - 0x2901 — The descriptor you read the version on
