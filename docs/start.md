@@ -6,7 +6,7 @@ sidebar_position: 2
 ## Whitelisting your key
 To begin working with the vehicle's BLE API, you'll need to generate and whitelist your public key with the vehicle.
 
-To do this, you'll need to first of all, generate an EC private key with the NISTP256 curve (aka secp256r1, and prime256v1), which you should store and keep safe, this key is used to sign all your message. From that, you'll need to generate a public key serialized to bytes in the X9.62 Uncompressed Point format (if done correctly, the first byte should always be 0x04), for now I'll call these `privateKey`, and `publicKey` respectively. Next serialize an unsigned protobuf message from the VCSEC protobuf in the following layout:
+To do this, you'll need to first of all, generate an EC private key with the NISTP256 curve (aka secp256r1, and prime256v1), which you should store and keep safe, this key is used to sign all your messages. From that, you'll need to generate a public key serialized to bytes in the X9.62 Uncompressed Point format (if done correctly, the first byte should always be 0x04), for now I'll call these `privateKey`, and `publicKey` respectively. Next serialize an unsigned protobuf message from the VCSEC protobuf in the following layout:
 ```
 UnsignedMessage {
 	WhitelistOperation {
@@ -41,8 +41,9 @@ someMsg = b'\x01\x02'
 prependedMsg = prependLength(someMsg)
 print(prependedMsg) # b'\x00\x02\x01\x02'
 ```
-Once you have serialized `protoMsg`, and prepended the length, send the message to the vehicle over a normal BluetoothLE connection on the write characteristic:
+Once you have serialized `protoMsg`, and prepended the length, send the message to the vehicle over a normal BluetoothLE connection on the following write characteristic:
 ```
+Serivce: 00000211-b2d1-43f0-9b88-960cebf8b91e
 UUID: 00000212-b2d1-43f0-9b88-960cebf8b91e
 Descriptor: 0x2901
 ```
@@ -55,6 +56,12 @@ FromVCSECMessage {
 		}
 	}
 }
+It should be received on the following indication charachteristic:
+```
+Serivce: 00000211-b2d1-43f0-9b88-960cebf8b91e
+UUID: 00000213-b2d1-43f0-9b88-960cebf8b91e
+Descriptor: 0x2901
+```
 ```
 Now tap an existing key card, and you should recieve the following message:
 ```
