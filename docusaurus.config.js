@@ -12,6 +12,7 @@ module.exports = {
   favicon: 'img/favicon.ico',
   organizationName: 'ArchGryphon9362', // Usually your GitHub org/user name.
   projectName: 'teslabtapi', // Usually your repo name.
+  plugins: [require.resolve('docusaurus-lunr-search')],
   themeConfig: {
     navbar: {
       title: 'Tesla BluetoothLE API (Unofficial)',
@@ -81,6 +82,10 @@ module.exports = {
     prism: {
       theme: lightCodeTheme,
       darkTheme: darkCodeTheme,
+    },
+    gtag: {
+      trackingID: 'G-4RSZY0PGHB',
+      anonymizeIP: false,
     },
   },
   presets: [
