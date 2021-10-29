@@ -62,8 +62,8 @@ FromVCSECMessage {
 		}
 	}
 }
-It should be received on the following indication charachteristic:
 ```
+It should be received on the following indication charachteristic:
 ```
 Serivce: 00000211-b2d1-43f0-9b88-960cebf8b91e
 UUID: 00000213-b2d1-43f0-9b88-960cebf8b91e
