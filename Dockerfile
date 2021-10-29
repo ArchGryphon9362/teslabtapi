@@ -3,7 +3,7 @@ FROM node:16
 WORKDIR /usr/src/app
 
 COPY package.json ./
-COPY .npmrc ./
+COPY yarn.lock ./
 
 RUN yarn global add http-server
 RUN yarn install
