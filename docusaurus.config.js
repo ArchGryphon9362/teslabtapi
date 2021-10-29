@@ -70,7 +70,16 @@ module.exports = {
         },
       ],
     },
-  ],],
+  ], [
+    'docusaurus-plugin-ackee', {
+      domainId: 'c21a18c1-4e62-485b-9eb4-a40feebb5164',
+      server: 'https://analytics.lexnastin.com',
+      detailed: true,
+      ignoreLocalhost: false,
+      ignoreOwnVisits: true,
+      ackeeTracerFile: 'tracer.js',
+    }
+  ]],
   themeConfig: {
     navbar: {
       title: 'Tesla BluetoothLE API (Unofficial)',
@@ -141,10 +150,6 @@ module.exports = {
       theme: lightCodeTheme,
       darkTheme: darkCodeTheme,
     },
-    gtag: {
-      trackingID: 'G-CLECDTCH6N',
-      anonymizeIP: false,
-    },
   },
   presets: [
     [
@@ -162,4 +167,10 @@ module.exports = {
       },
     ],
   ],
+  scripts: [
+    {
+      src: '/remove-cookies.js',
+      defer: true
+    }
+  ]
 };
