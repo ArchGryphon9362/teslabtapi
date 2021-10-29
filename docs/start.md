@@ -47,6 +47,12 @@ Serivce: 00000211-b2d1-43f0-9b88-960cebf8b91e
 UUID: 00000212-b2d1-43f0-9b88-960cebf8b91e
 Descriptor: 0x2901
 ```
+The vehicle's BLE name should match this regular expression written by me:
+```
+/ ^S[a-f\d]{16}[A-F]$ /
+```
+It means that the first letter has to be "S", the next 16 characters are all either "a", "b", "c", "d", "e", "f", "0", "1", "2", "3", "4", "5", "6", "7", "8", or "9", and the last letter is either "A", "B", "C", "D", "E", or "F".
+
 Whenever the vehicle responds, it should always respond with a FromVCSECMessage message, which after removing the first 2 bytes (which are the length of the message), you can decode. In this case the vehicle should respond with the following message:
 ```
 FromVCSECMessage {
