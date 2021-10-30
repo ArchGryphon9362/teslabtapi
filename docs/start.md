@@ -3,6 +3,10 @@ sidebar_position: 2
 ---
 
 # Getting Started
+:::tip
+I really recommend reading over this to grasp and understanding of how this stuff works, but if you just want to see what the car can do go to [more info](#more-info)
+:::
+
 ## Whitelisting your key
 To begin working with the vehicle's BLE API, you'll need to generate and whitelist your public key with the vehicle.
 
@@ -153,7 +157,7 @@ ToVCSECMessage {
 	}
 }
 ```
-## Sending actions manually
+## Sending manual actions
 Say a user interacts with an app or needs to do something that can't be done automatically. In that case you need to send an RKE action. You can send those by making a message in the following format, signing it, prepending length, and sending it to the vehicle like with any other signed message:
 ```
 UnsignedMessage {
@@ -162,7 +166,7 @@ UnsignedMessage {
 ```
 
 ## More Info
-For more info, you can begin looking at [ToVCSECMessage](tovcsec), and [FromVCSECMessage](fromvcsec).
+For more info, you can begin looking at [ToVCSECMessage](tovcsec) ([UnsignedMessage](other/unsignedmsg) in particular) to see things you can send to the car, and [FromVCSECMessage](fromvcsec) to see things you receive to the car.
 
 Don't forget, VCSEC, is the vehicle's secondary security system, so you send **To**VCSECMessage messages, and the vehicle sends you back **From**VCSECMessage messages.
 
