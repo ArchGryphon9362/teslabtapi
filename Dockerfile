@@ -8,7 +8,11 @@ COPY yarn.lock ./
 RUN yarn global add http-server
 RUN yarn install
 
-COPY ["docs", "src", "babel.config.js", "docusaurus.config.js", "sidebars.js", "./"]
+COPY docs .
+COPY src .
+COPY babel.config.js .
+COPY docusaurus.config.js .
+COPY sidebars.js .
 
 RUN yarn build
 
