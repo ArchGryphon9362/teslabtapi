@@ -4,7 +4,7 @@ sidebar_position: 2
 
 # Getting Started
 :::tip
-I really recommend reading over this to grasp and understanding of how this stuff works, but if you just want to see what the car can do go to [more info](#more-info)
+I really recommend reading over this to grasp an understanding of how this stuff works, but if you just want to see what the car can do go to [more info](#more-info)
 :::
 
 ## Whitelisting your key
