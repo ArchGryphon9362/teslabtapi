@@ -8,7 +8,7 @@ COPY yarn.lock ./
 RUN yarn global add http-server
 RUN yarn install
 
-COPY .[^static] .
+COPY ./[^static]* .
 
 RUN yarn build
 
