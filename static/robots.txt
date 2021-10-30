@@ -1,2 +1,4 @@
+Sitemap: https://teslabtapi.lexnastin.com/sitemap.xml
+
 User-agent: *
 Allow: /
