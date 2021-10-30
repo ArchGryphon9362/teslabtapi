@@ -10,12 +10,19 @@ RUN yarn install
 
 COPY docs/ ./docs/
 COPY src/ ./src/
+COPY static/ ./static/
 COPY babel.config.js ./
 COPY docusaurus.config.js ./
 COPY sidebars.js ./
 
 RUN yarn build
 
-COPY ./static .
+RUN rm -r docs
+RUN rm -r src
+RUN rm -r static
+RUN rm babel.config.js
+RUN rm docusaurus.config.js
+RUN rm sidebars.js
+
 
 CMD [ "npx", "http-server", "build" ]
