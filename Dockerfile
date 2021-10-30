@@ -8,10 +8,10 @@ COPY yarn.lock ./
 RUN yarn global add http-server
 RUN yarn install
 
-COPY ["!(static)", "./"]
+COPY ["./docs", "./src", "./babel.config.js", "docusaurus.config.js", "sidebars.js", "./"]
 
 RUN yarn build
 
-COPY static .
+COPY ./static .
 
 CMD [ "npx", "http-server", "build" ]
