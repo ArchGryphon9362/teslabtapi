@@ -121,7 +121,7 @@ UnsignedMessage {
 	}
 }
 ```
-Set a variable called `counter` to 1 (can be any number that hasn't been used as the counter for this key and must be >= 1), which you should increment each time after using. Now, you need to encrypt this message using the `sharedKey` with AES encryption in GCM mode, with a nonce of the `counter`, split into 4 bytes in big-endian, where the least significant byte is at the end, so say counter is 23, the nonce will be `b'\x00\x00\x00\x17'`. You should also seperate the encrypted/signed message into 2 variables, `encryptedMsg` (from bytes 0 to `length` - 16), and `msgSignature` (from bytes `length` - 16 to `length`). Now you need to generate a message to send to the vehicle:
+Set a variable called `counter` to 1 (can be any number that hasn't been used as the counter for this key and must be >= 1), which you should increment each time after using. Now, you need to encrypt this message using the `sharedKey` with AES encryption in GCM mode, with a nonce of the `counter`, split into 4 bytes in big-endian, where the least significant byte is at the end, so say counter is 23, the nonce will be `b'\x00\x00\x00\x17'`. You should also separate the encrypted/signed message into 2 variables, `encryptedMsg` (from bytes 0 to `length` - 16), and `msgSignature` (from bytes `length` - 16 to `length`). Now you need to generate a message to send to the vehicle:
 ```
 ToVCSECMessage {
 	signedMessage {
