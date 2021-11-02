@@ -10,7 +10,7 @@ I really recommend reading over this to grasp an understanding of how this stuff
 ## Whitelisting your key
 To begin working with the vehicle's BLE API, you'll need to generate and whitelist your public key with the vehicle.
 
-To do this, you'll need to first of all, generate an EC private key with the NISTP256 curve (aka secp256r1, and prime256v1), which you should store and keep safe, this key is used to sign all your messages. From that, you'll need to generate a public key serialized to bytes in the X9.62 Uncompressed Point format (if done correctly, the first byte should always be 0x04), for now I'll call these `privateKey`, and `publicKey` respectively. Next serialize an unsigned protobuf message from the VCSEC protobuf in the following layout:
+To do this, you'll need to first of all, generate an EC private key with the NISTP256 curve (aka secp256r1, and prime256v1), which you should store and keep safe, this key is used to sign all your messages. From that, you'll need to generate a public key serialized to bytes in the ANSI X9.62 Uncompressed Point format (if done correctly, the first byte should always be 0x04), for now I'll call these `privateKey`, and `publicKey` respectively. Next serialize an unsigned protobuf message from the VCSEC protobuf in the following layout:
 ```
 UnsignedMessage {
 	WhitelistOperation {
@@ -110,7 +110,7 @@ FromVCSECMessage {
 	}
 }
 ```
-When you recieve it, it should be in the X9.62 EncodedPoint format, with the NISTP256 format. Once you load it into a variable, I'll call it `ephemeral_key`. What you now need to do is generate an AES secret from the vehicle's ephemeral public key, and your secret key. Now you need to make a SHA1 of it, and put the first 16 bytes in a variable which I'll call `sharedKey`.
+When you recieve it, it should be in the ANSI X9.62 Uncompressed Point format, with the NISTP256 format, the same format that your public key was in. Once you load it into a variable, I'll call it `ephemeral_key`. What you now need to do is generate an AES secret from the vehicle's ephemeral public key, and your secret key. Now you need to make a SHA1 of it, and put the first 16 bytes in a variable which I'll call `sharedKey`.
 
 ## Authenticating
 For the vehicle to know that you are connected, and to be able to send + receive messages, you need to authenticate yourself. To do so, you'll need to generate an authentication message in the following format:
