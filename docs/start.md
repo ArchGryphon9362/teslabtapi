@@ -110,7 +110,7 @@ FromVCSECMessage {
 	}
 }
 ```
-When you recieve it, it should be in the encoded ANSI X9.62 Uncompressed Point format, with the NISTP256 format. Once you load it into a variable, I'll call it `ephemeral_key`. What you now need to do is generate an AES secret from the vehicle's ephemeral public key, and your secret key. Now you need to make a SHA1 of it, and put the first 16 bytes in a variable which I'll call `sharedKey`.
+When you recieve it, it should be in the X9.62 EncodedPoint format, with the NISTP256 format. Once you load it into a variable, I'll call it `ephemeral_key`. What you now need to do is generate an AES secret from the vehicle's ephemeral public key, and your secret key. Now you need to make a SHA1 of it, and put the first 16 bytes in a variable which I'll call `sharedKey`.
 
 ## Authenticating
 For the vehicle to know that you are connected, and to be able to send + receive messages, you need to authenticate yourself. To do so, you'll need to generate an authentication message in the following format:
