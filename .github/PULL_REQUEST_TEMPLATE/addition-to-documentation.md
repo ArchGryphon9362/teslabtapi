@@ -8,8 +8,8 @@ assignees: ArchGryphon9362
 
 ---
 
-**What has been added?**
+## What has been added?
 Describe what you added here.
 
-**Additional info**
+## Additional info
 Have anything additional to say? Say it here.
