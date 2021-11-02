@@ -3,7 +3,8 @@ FROM node:16
 WORKDIR /usr/src/app
 
 COPY package.json ./
-COPY yarn.lock ./
+# COPY yarn.lock ./
+# removed yarn.lock to prevent vulnerabilies (in short, just for auto updates)
 
 RUN yarn global add http-server
 RUN yarn install
