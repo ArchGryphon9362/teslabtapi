@@ -8,11 +8,11 @@ assignees: ArchGryphon9362
 
 ---
 
-**Where must the new documentation be added?**
+## Where must the new documentation be added?
 Give us a link or clear description to where the addition must be made
 
-**What is the addition?**
+## What is the addition?
 Tell us what must be added to make the documentation be more complete.
 
-**Additional context**
+## Additional context
 Add any other context about the addition here.
