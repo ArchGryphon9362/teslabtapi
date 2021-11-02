@@ -7,8 +7,8 @@ assignees: ArchGryphon9362
 
 ---
 
-**What is the mistake, and what has been corrected?**
+## What is the mistake, and what has been corrected?
 Explain to us what is wrong about that/those part(s).
 
-**Additional info**
+## Additional info
 Have anything else to say? Say it here.
