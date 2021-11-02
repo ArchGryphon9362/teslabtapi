@@ -1,7 +1,7 @@
 ---
 name: Mistake In Documentation
 about: Use this template whenever you find a mistake in the documentation
-title: "[MISTAKE]"
+title: "[Mistake]"
 labels: mistake
 assignees: ArchGryphon9362
 

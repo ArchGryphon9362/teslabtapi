@@ -2,7 +2,7 @@
 name: Addition To Documentation
 about: Use this template whenever you find out more information about the protocol,
   and can add to the documentation
-title: "[ADDITION]"
+title: "[Addition]"
 labels: addition
 assignees: ArchGryphon9362
 

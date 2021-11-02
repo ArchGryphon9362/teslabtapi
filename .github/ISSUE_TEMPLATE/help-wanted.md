@@ -1,7 +1,7 @@
 ---
 name: Need Help
 about: Use this template whenever you're confused in anything with the documentation or need help with closly related matters
-title: "[HELP]"
+title: "[Help]"
 labels: help wanted
 assignees: ArchGryphon9362
 
