@@ -157,6 +157,29 @@ ToVCSECMessage {
 	}
 }
 ```
+
+:::note
+I recommend only changing this to other auth levels when the car requests it. Here's an example of a message you may get from the car, requesting to unlock it:
+```
+FromVCSECMessage {
+	authenticationRequest {
+	sessionInfo {
+		token: "some random token that i don't know the use of"
+	}
+	requestedLevel: AUTHENTICATION_LEVEL_DRIVE
+	}
+}
+```
+In this case you'll just send the car back the following message:
+```
+UnsignedMessage {
+	AuthenticationResponse {
+		authenticationLevel: AUTHENTICATION_LEVEL_DRIVE
+	}
+}
+```
+Don't worry about the walk-away car lock, when you walk away the car will automatically lock
+:::
 ## Sending manual actions
 Say a user interacts with an app or needs to do something that can't be done automatically. In that case you need to send an RKE action. You can send those by making a message in the following format, signing it, prepending length, and sending it to the vehicle like with any other signed message:
 ```
