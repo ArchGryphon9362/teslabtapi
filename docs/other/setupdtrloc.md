@@ -2,4 +2,4 @@
 
 Type|Name|Description|Repeated?
 -|-|-|-
-[`UpdaterLocation`](../enums/updaterlocation)|updaterLocation|...|no
+[`UpdaterLocation`](../enums/updaterlocation)|`updaterLocation`|...|no

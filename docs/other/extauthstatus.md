@@ -2,5 +2,5 @@
 
 Type|Name|Description|Repeated?
 -|-|-|-
-bool|active|...|no
-[`UnsignedMessage`](unsignedmsg)|messageToBeSignedAsBytes|...|no
+`bool`|`active`|...|no
+[`UnsignedMessage`](unsignedmsg)|`messageToBeSignedAsBytes`|...|no

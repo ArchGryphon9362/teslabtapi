@@ -2,4 +2,4 @@
 
 Type|Name|Description|Repeated?
 -|-|-|-
-string|VIN|...|no
+`string`|`VIN`|Vehicle Identification Number|no
