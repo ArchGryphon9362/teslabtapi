@@ -92,8 +92,6 @@ The rest of the message can then be decoded. Below is an example response to a w
 FromVCSECMessage {
 	commandStatus {
 		operationStatus: OPERATIONSTATUS_WAIT
-		signedMessageStatus {
-		}
 	}
 }
 ```
@@ -107,7 +105,10 @@ Now tap an existing key card, and you should recieve the following message:
 ```
 FromVCSECMessage {
 	commandStatus {
-		signedMessageStatus {
+		whitelistOperationStatus {
+			signerOfOperation {
+				publicKeySHA1: 0x5f0d64b3
+			}
 		}
 	}
 }
