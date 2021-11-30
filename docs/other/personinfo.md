@@ -2,4 +2,4 @@
 
 Type|Name|Description|Repeated?
 -|-|-|-
-bytes|VIN|...|no
+`bytes`|`VIN`|Vehicle Identification Number|no

@@ -23,4 +23,4 @@ yarn start
 You should now have a local test server running on [`localhost:3000`](http://localhost:3000) which update live as soon as you save any of the markdown files!
 
 ## After you're done
-After you're done, you should push the changes back onto your Github repository, and can create a pull request which will be reviewed and most likely merged!
+After you're done, you should push the changes back onto your GitHub repository, and can create a pull request which will be reviewed and most likely merged!

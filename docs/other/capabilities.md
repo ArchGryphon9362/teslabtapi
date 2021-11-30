@@ -2,5 +2,5 @@
 
 Type|Name|Description|Repeated?
 -|-|-|-
-bool|chargePortOpen|Whether the charge port has the ability to open|no
-bool|chargePortClose|Whether the charge port has the ability to close|no
+`bool`|`chargePortOpen`|Whether the vehicle can open the charge port|no
+`bool`|`chargePortClose`|Whether the vehicle can close the charge port|no

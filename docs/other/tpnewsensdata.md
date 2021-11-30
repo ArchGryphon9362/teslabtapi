@@ -2,4 +2,8 @@
 
 Type|Name|Description|Repeated?
 -|-|-|-
-[`PublicKey`](publickey)|sensorPublicKey|The public key of the new TPS|no
+[`PublicKey`](publickey)|`sensorPublicKey`|The public key of the new TPS|no
+
+:::note
+`TPS` stands for `Tire Pressure Sensor`
+:::

@@ -2,4 +2,4 @@
 
 Type|Name|Description|Repeated?
 -|-|-|-
-[`KeyIdentifier`](keyidentifier)|activeKey|...|no
+[`KeyIdentifier`](keyidentifier)|`activeKey`|...|no
