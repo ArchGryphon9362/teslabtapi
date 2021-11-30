@@ -79,7 +79,7 @@ In human talk, the BLE name should be composed of the following:
 - 16 characters from this list: "a", "b", "c", "d", "e", "f", "0", "1", "2", "3", "4", "5", "6", "7", "8", or "9"
 - One character that is either "A", "B", "C", "D", "E", or "F"
 
-For example, `SAAAAAAAAAAAAAAAAF` would be a valid BLE name for the car.
+For example, `SaaaaaaaaaaaaaaaaF` or `Sc6b7ccc84c5b6418B` would be a valid BLE name for the car.
 
 ### Response
 
