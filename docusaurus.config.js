@@ -7,6 +7,7 @@ module.exports = {
   tagline: 'The API documentation you\'ve all been waiting for 😃',
   url: 'https://teslabtapi.lexnastin.com',
   baseUrl: '/',
+  trailingSlash: false,
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: '/img/icon.svg',
@@ -167,7 +168,6 @@ module.exports = {
         sitemap: {
           changefreq: 'weekly',
           priority: 0.5,
-          trailingSlash: false,
         },
       },
     ],
