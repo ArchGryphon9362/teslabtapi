@@ -6,6 +6,13 @@ name: Doucsaurus Test Build
 on:
   pull_request:
     branches: [ main ]
+    paths:
+      - docs/**
+      - src/**
+      - static/**
+      - babel.config.js
+      - docusaurus.config.js
+      - sidebars.js
 
 jobs:
   build:
