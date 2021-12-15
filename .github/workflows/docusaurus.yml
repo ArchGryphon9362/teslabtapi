@@ -3,6 +3,13 @@ name: Doucsaurus Build
 on:
   push:
     branches: [ main ]
+    paths:
+      - docs/**
+      - src/**
+      - static/**
+      - babel.config.js
+      - docusaurus.config.js
+      - sidebars.js
 
 jobs:
   build:
