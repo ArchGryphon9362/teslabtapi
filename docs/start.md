@@ -38,7 +38,7 @@ UnsignedMessage {
 	}
 }
 ```
-You may add any other permissions as needed but these are the ones that let you unlock, and start the vehicle. We'll call the previously serialized message the `protoMsg`.
+You may add any other permissions as needed but these are the default ones (the ones that let you unlock, and start the vehicle, among other things). We'll call the previously serialized message the `protoMsg`.
 
 Once you have it serialized to bytes, you need to make a `ToVCSECMessage` message of the following format:
 ```
