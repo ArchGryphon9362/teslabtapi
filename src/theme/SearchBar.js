@@ -9,3 +9,6 @@
 // Tip: swizzle the SearchBar from the Algolia theme for inspiration:
 // npm run swizzle @docusaurus/theme-search-algolia SearchBar
 export {default} from '@docusaurus/Noop';
+
+
+// Just a random comment commit for testing purposes
