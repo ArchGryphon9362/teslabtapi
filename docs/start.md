@@ -3,6 +3,11 @@ sidebar_position: 2
 ---
 
 # Getting Started
+:::warning
+Tesla has updated their VCSEC for the new Model S and X, among other things. I'm currently in the process of extracting that. The current stuff should continue to work, but I can't predict for how long it'll continue working. Also, since the car uses 4 byte nonces many libraries will deem this as insecure and won't allow you to do that, and after checking out the new Tesla app, sadly the problem still exists and you must modify these libraries to work with the car :/
+
+**Once I extract the protobuf, you'll be able to choose between the new and old version of the documentation!**
+:::
 :::tip
 I really recommend reading this over to grasp an understanding of how this stuff works. If you just want to see what the car can do, skip down to [more info](#more-info).
 :::
@@ -24,8 +29,7 @@ Next serialize, an unsigned protobuf message from the VCSEC protobuf in the foll
 UnsignedMessage {
 	WhitelistOperation {
 		addKeyToWhitelistAndAddPermissions {
-			key {
-				PublicKeyRaw: <publicKey>
+			key {				PublicKeyRaw: <publicKey>
 			}
 			permission: WHITELISTKEYPERMISSION_LOCAL_DRIVE
 			permission: WHITELISTKEYPERMISSION_LOCAL_UNLOCK
