@@ -3,9 +3,6 @@ sidebar_position: 2
 ---
 
 # Getting Started
-:::info
-Hey, so a couple of people asked me at this point: "How does the car's BLE name correlate to anything else?", to which I don't really have an answer, so in an effort to find that out, I've made an anonymous form where you can fill out your VIN and the BLE name of your car, to let me look for more patterns in things such as the ending of your serial number (which is the only slightly sensitive part of your VIN), the model of your car, and other things you might find useful to submit. If you mind taking a minute to help me with this, here's the link to the form, thanks: https://forms.gle/eDDz22vJyV9hwLNi6
-:::
 :::warning
 Tesla has updated their VCSEC for the new Model S and X, among other things. I'm currently in the process of extracting that. The current stuff should continue to work, but I can't predict for how long it'll continue working. Also, since the car uses 4 byte nonces many libraries will deem this as insecure and won't allow you to do that, and after checking out the new Tesla app, sadly the problem still exists and you must modify these libraries to work with the car :/
 
