@@ -79,6 +79,11 @@ The vehicle's BLE name is fairly easy to figure out. You need to do the followin
 - Get a SHA1 hash of it, we'll call this `vinSHA`
 - Get the `vinSHA` as a hex string, and keep only the first 16 characters, we'll call this `middleSection`
 - Prepend "S" to `middleSection` and that is it. The last character will be any letter from A to F, but you don't have to pay attention to that
+- All that is currently known about the last letter is that it must be one of the following:
+  - C
+  - R
+  - D
+  - P
 #### Python Example
 ```py
 from cryptography.hazmat.primitives import hashes
