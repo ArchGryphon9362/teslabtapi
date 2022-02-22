@@ -77,16 +77,25 @@ Descriptor: 0x2901
 ```
 
 ### Vehicle BLE Name
-The vehicle's BLE name should match the following regular expression:
-```
-/ ^S[a-f\d]{16}[A-F]$ /
-```
-In human talk, the BLE name should be composed of the following:
-- "S"
-- 16 characters from this list: "a", "b", "c", "d", "e", "f", "0", "1", "2", "3", "4", "5", "6", "7", "8", or "9"
-- One character that is either "A", "B", "C", "D", "E", or "F"
+The vehicle's BLE name is fairly easy to figure out. You need to do the following to get the whole name except the last character:
+- Get the vehicle's VIN, we'll call this `vin`
+- Get a SHA1 hash of it, we'll call this `vinSHA`
+- Get the `vinSHA` as a hex string, and keep only the first 16 characters, we'll call this `middleSection`
+- Prepend "S" to `middleSection` and that is it. The last character will be any letter from A to F, but you don't have to pay attention to that
+#### Python Example
+```py
+from cryptography.hazmat.primitives import hashes
 
-For example, `SaaaaaaaaaaaaaaaaF` or `Sc6b7ccc84c5b6418B` would be a valid BLE name for the car.
+vin = bytes("5YJ3E1EA1KF000000", "UTF8")
+
+digest = hashes.Hash(hashes.SHA1())
+digest.update(vin)
+vinSHA = digest.finalize().hex()
+middleSection = vinSHA[0:16]
+bleName = "S" + middleSection + "?"
+
+print(bleName) # Sa6bab0d54ffaecf1?
+```
 
 ### Response
 
