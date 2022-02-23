@@ -77,6 +77,84 @@ UUID: 00000212-b2d1-43f0-9b88-960cebf8b91e
 Descriptor: 0x2901
 ```
 
+<details>
+<summary>Python Example</summary>
+
+```py
+import VCSEC
+from cryptography.hazmat.primitives.asymmetric import ec
+from cryptography.hazmat.primitives import serialization
+
+# Function to prepend message length
+def prepend_length(message):
+	return (len(message).to_bytes(2, 'big') + message)
+
+# Generate private keys, and derive public key in X9.62 Uncompressed Point Encoding
+privateKey = ec.generate_private_key(ec.SECP256R1())
+publicKey = privateKey.public_key().public_bytes(serialization.Encoding.X962, serialization.PublicFormat.UncompressedPoint)
+
+# Print the public key for information purposes
+print("Public Key:")
+print(publicKey.hex(" "))
+
+# Create a "public key" variable and set its public key to the one we generated
+key = VCSEC.PublicKey()
+key.PublicKeyRaw = publicKey
+
+# Add perissions to a "permission change" variable and add the key variable to it
+permissionChange = VCSEC.PermissionChange()
+permissionChange.permission.append(VCSEC.WhitelistKeyPermission_E.WHITELISTKEYPERMISSION_LOCAL_DRIVE)
+permissionChange.permission.append(VCSEC.WhitelistKeyPermission_E.WHITELISTKEYPERMISSION_LOCAL_UNLOCK)
+permissionChange.permission.append(VCSEC.WhitelistKeyPermission_E.WHITELISTKEYPERMISSION_REMOTE_DRIVE)
+permissionChange.permission.append(VCSEC.WhitelistKeyPermission_E.WHITELISTKEYPERMISSION_REMOTE_UNLOCK)
+permissionChange.key.CopyFrom(key)
+
+# Create a "key metadata" variable and set its form factor to android (can technically be anything in the enum)
+metadataForKey = VCSEC.KeyMetadata()
+metadataForKey.keyFormFactor = VCSEC.KeyFormFactor.KEY_FORM_FACTOR_ANDROID_DEVICE
+
+# Create a "whitelist operation" variable and set its permission change variable to the one we created, and also set its key metadata variable to our's
+whitelistOperation = VCSEC.WhitelistOperation()
+whitelistOperation.addKeyToWhitelistAndAddPermissions.CopyFrom(permissionChange)
+whitelistOperation.metadataForKey.CopyFrom(metadataForKey)
+
+# Create an "unsigned message" variable and set its whitelist operation to our's
+unsignedMessage = VCSEC.UnsignedMessage()
+unsignedMessage.WhitelistOperation.CopyFrom(whitelistOperation)
+
+# Print the unsigned message layout for information purposes
+print("\nUnsigned Message Layout:")
+print(unsignedMessage)
+
+# Serialize our unsigned message variable
+protoMsg = unsignedMessage.SerializeToString()
+
+# Create a "signed message variable" and set its protobuf message to the one we created, and set the signature type to ask the user to tap the key card
+signedMessage = VCSEC.SignedMessage()
+signedMessage.protobufMessageAsBytes = protoMsg
+signedMessage.signatureType = VCSEC.SignatureType.SIGNATURE_TYPE_PRESENT_KEY
+
+# Create a "to vcsec message" and assign its signed message to the one we created
+toVCSECMessage = VCSEC.ToVCSECMessage()
+toVCSECMessage.signedMessage.CopyFrom(signedMessage)
+
+# Print the to vcsec message layout for information purposes
+print("\nTo VCSEC Message Layout:")
+print(toVCSECMessage)
+
+# Serialize the to vcsec message
+authMsg = toVCSECMessage.SerializeToString()
+
+# Prepend the length to our message
+prependedMsg = prepend_length(authMsg)
+
+# Print the final message needed to send to car
+print("\nFinal Message To Send To Car:")
+print(prependedMsg.hex(" "))
+```
+
+</details>
+
 ### Vehicle BLE Name
 The vehicle's BLE name is fairly easy to figure out. You need to do the following to get the whole name except the last character:
 - Get the vehicle's VIN, we'll call this `vin`
