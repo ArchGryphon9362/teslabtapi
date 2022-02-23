@@ -29,7 +29,8 @@ Next serialize, an unsigned protobuf message from the VCSEC protobuf in the foll
 UnsignedMessage {
 	WhitelistOperation {
 		addKeyToWhitelistAndAddPermissions {
-			key {				PublicKeyRaw: <publicKey>
+			key {
+				PublicKeyRaw: <publicKey>
 			}
 			permission: WHITELISTKEYPERMISSION_LOCAL_DRIVE
 			permission: WHITELISTKEYPERMISSION_LOCAL_UNLOCK
