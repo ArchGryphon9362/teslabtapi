@@ -65,7 +65,7 @@ We need to prepare this message by defining a function `prependLength`:
 - Sets the first two bytes to the length of the message
   - Note: In most/all cases the byte array will be the final serialized message
 
-```python
+```py
 someMsg = b'\x01\x02'
 prependedMsg = prependLength(someMsg)
 print(prependedMsg) # b'\x00\x02\x01\x02'
@@ -253,6 +253,9 @@ FromVCSECMessage {
 Now that you have the `ephemeral_key`, generate an AES secret from the `ephemeral_key` and your secret key. Next, make a SHA1 of it, and put take the first 16 bytes to form your `sharedKey`.
 
 ## Authenticating
+:::warning
+Due to Tesla's implementation of message signing, you are *required* to use a 4 byte long nonce, which is a problem as it might be deemed insecure by some libraries (such as the one in the example this section), and they must be modified to remove the limit, or the encryption must be done without a library if that such a modified library is not available.
+:::
 For the vehicle to know that you are connected and to be able to send/receive messages, you need to generate an authentication message in the following format:
 ```proto
 UnsignedMessage {
@@ -261,13 +264,15 @@ UnsignedMessage {
 	}
 }
 ```
-Set a variable called `counter` to 1 (can be any number that hasn't been used as the counter for this key and must be >= 1), which you should increment each time after using.
+Set a variable called `counter` to 1 (can be any number that hasn't been used as the counter for this key and must be >= 1), which you should increment (or change to an unused one) each time after using.
 
-Now, you need to encrypt this message using the `sharedKey` with AES encryption in GCM mode, with a nonce of the `counter`, split into 4 bytes in big-endian, where the least significant byte is at the end.
+Now, you need to encrypt this message using the `sharedKey` with AES encryption in GCM mode, with a nonce of the `counter`, split into 4 bytes in big-endian, where the most significant byte is at the end.
 
-For example, if `counter` is 23, the nonce will be `b'\x00\x00\x00\x17'`.
+So, if `counter` is `23` (`0x17`), the nonce will be `b'\x00\x00\x00\x17'`.
 
-You should also separate the encrypted/signed message into 2 variables, `encryptedMsg` (from bytes 0 to `length` - 16), and `msgSignature` (from bytes `length` - 16 to `length`).
+We'll call this `encryptedMsgWithTag` as it has a signature tag that we'll need to separate.
+
+You should separate the encrypted/signed message into 2 variables, `encryptedMsg` (from byte `0` to `encryptedMsgWithTag.length - 16`), and `msgSignature` (from byte `encryptedMsgWithTag.length - 16` to `encryptedMsgWithTag.length`).
 
 Now you can send the message to the vehicle! Use the following format:
 ```proto
