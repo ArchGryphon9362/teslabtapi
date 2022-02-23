@@ -84,7 +84,10 @@ The vehicle's BLE name is fairly easy to figure out. You need to do the followin
   - R
   - D
   - P
-#### Python Example
+
+<details>
+<summary>Python Example</summary>
+
 ```py
 from cryptography.hazmat.primitives import hashes
 
@@ -98,6 +101,8 @@ bleName = "S" + middleSection + "?"
 
 print(bleName) # Sa6bab0d54ffaecf1?
 ```
+
+</details>
 
 ### Response
 
