@@ -5,7 +5,6 @@
             pattern: /\w+(?=[ \t]+{)/g,
             alias: 'function'
         },
-        'tag': /<.+>/g,
         'variable': /(?<=[ \t])\w+(?=:)/g,
         'property': {
             pattern: /(?<=: +).*/g,
