@@ -77,15 +77,6 @@ UUID: 00000212-b2d1-43f0-9b88-960cebf8b91e
 Descriptor: 0x2901
 ```
 
-<details>
-<summary>Python Example</summary>
-
-```py
-
-```
-
-</details>
-
 ### Vehicle BLE Name
 The vehicle's BLE name is fairly easy to figure out. You need to do the following to get the whole name except the last character:
 - Get the vehicle's VIN, we'll call this `vin`
