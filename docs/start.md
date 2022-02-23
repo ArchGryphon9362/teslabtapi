@@ -3,6 +3,9 @@ sidebar_position: 2
 ---
 
 # Getting Started
+
+import ReactSpoiler from "react-spoiler";
+
 :::warning
 Tesla has updated their VCSEC for the new Model S and X, among other things. I'm currently in the process of extracting that. The current stuff should continue to work, but I can't predict for how long it'll continue working. Also, since the car uses 4 byte nonces many libraries will deem this as insecure and won't allow you to do that, and after checking out the new Tesla app, sadly the problem still exists and you must modify these libraries to work with the car :/
 
@@ -20,16 +23,16 @@ To do this, you'll need two things:
   - Keep this safe! This key is used to sign all your messages.
 - Using your private key, you'll need to generate a public key serialized to bytes in the ANSI X9.62/X9.63 Uncompressed Point format
   - If done correctly, the first byte should always be `0x04`
-  - I never tried it, but Compressed Point might work too, that is where the first byte is `0x02` or `0x03`. If it does work, please tell me so that I can update the documentation! If you're feeling wild and try out any other public key encodings that work, then please notify me too!
+  - <ReactSpoiler blur="10" hoverBlur="2">I never tried it, but Compressed Point might work too, that is where the first byte is <inlineCode>0x02</inlineCode> or <inlineCode>0x03</inlineCode>. If it does work, please tell me so that I can update the documentation! If you're feeling wild and try out any other public key encodings that work, then please notify me too!</ReactSpoiler>
 
 We'll call these `privateKey`, and `publicKey` respectively.
 
 Next serialize, an unsigned protobuf message from the VCSEC protobuf in the following layout:
-```
+```proto
 UnsignedMessage {
-	WhitelistOperation {
-		addKeyToWhitelistAndAddPermissions {
-			key {
+	WhitelistOperation: WhitelistOperation {
+		addKeyToWhitelistAndAddPermissions: PermissionChange {
+			key: PublicKey {
 				PublicKeyRaw: <publicKey>
 			}
 			permission: WHITELISTKEYPERMISSION_LOCAL_DRIVE
@@ -37,7 +40,7 @@ UnsignedMessage {
 			permission: WHITELISTKEYPERMISSION_REMOTE_DRIVE
 			permission: WHITELISTKEYPERMISSION_REMOTE_UNLOCK
 		}
-		metadataForKey {
+		metadataForKey: KeyMetadata {
 			keyFormFactor: KEY_FORM_FACTOR_ANDROID_DEVICE
 		}
 	}
@@ -46,9 +49,9 @@ UnsignedMessage {
 You may add any other permissions as needed but these are the default ones (the ones that let you unlock, and start the vehicle, among other things). We'll call the previously serialized message the `protoMsg`.
 
 Once you have it serialized to bytes, you need to make a `ToVCSECMessage` message of the following format:
-```
+```proto
 ToVCSECMessage {
-	signedMessage {
+	signedMessage: SignedMessage {
 		protobufMessageAsBytes: <protoMsg>
 		signatureType: SIGNATURE_TYPE_PRESENT_KEY
 	}
@@ -68,11 +71,20 @@ prependedMsg = prependLength(someMsg)
 print(prependedMsg) # b'\x00\x02\x01\x02'
 ```
 Once you have serialized `protoMsg`, and prepended the length, send the message to the vehicle over a normal BluetoothLE connection on the following write characteristic:
-```
+```yaml
 Serivce: 00000211-b2d1-43f0-9b88-960cebf8b91e
 UUID: 00000212-b2d1-43f0-9b88-960cebf8b91e
 Descriptor: 0x2901
 ```
+
+<details>
+<summary>Python Example</summary>
+
+```py
+
+```
+
+</details>
 
 ### Vehicle BLE Name
 The vehicle's BLE name is fairly easy to figure out. You need to do the following to get the whole name except the last character:
@@ -112,25 +124,25 @@ The vehicle will always respond with a `FromVCSECMessage` message.
 The first two bytes of this message represent the length of the message.
 
 The rest of the message can then be decoded. Below is an example response to a whilelist request:
-```
+```proto
 FromVCSECMessage {
-	commandStatus {
+	commandStatus: CommandStatus {
 		operationStatus: OPERATIONSTATUS_WAIT
 	}
 }
 ```
 It should be received on the following indication characteristic:
-```
+```yaml
 Serivce: 00000211-b2d1-43f0-9b88-960cebf8b91e
 UUID: 00000213-b2d1-43f0-9b88-960cebf8b91e
 Descriptor: 0x2901
 ```
 Now tap an existing key card, and you should recieve the following message:
-```
+```proto
 FromVCSECMessage {
-	commandStatus {
-		whitelistOperationStatus {
-			signerOfOperation {
+	commandStatus: CommandStatus {
+		whitelistOperationStatus: WhitelistOperation_status {
+			signerOfOperation: KeyIdentifier {
 				publicKeySHA1: 0x5f0d64b3
 			}
 		}
@@ -147,12 +159,12 @@ By definition, this name should change every so often, but I never experienced i
 First, generate the `keyId`. This can be done by taking the first 4 bytes of a SHA1 digest of `publicKey`.
 
 Now that you have your `keyId`, you'll need to request the vehicle's ephemeral key. You can do this by making a `ToVCSECMessage` message with the following layout:
-```
+```proto
 ToVCSECMessage {
-	unsignedMessage {
-		InformationRequest {
+	unsignedMessage: UnsignedMessage {
+		InformationRequest: InformationRequest {
 			informationRequestType: INFORMATION_REQUEST_TYPE_GET_EPHEMERAL_PUBLIC_KEY
-			keyId {
+			keyId: KeyIdentifier {
 				publicKeySHA1: <keyId>
 			}
 		}
@@ -162,9 +174,9 @@ ToVCSECMessage {
 Now, serialize this message to bytes as `getEphemeralBytes`. Prepend the message with `prependLength(getEphemeralBytes)`, and send the value to the vehicle.
 
 The vehicle should respond with a message in the ANSI X9.62/X9.63 Uncompressed Point format, with the NISTP256 format. When decoded, it should looks something like this:
-```
+```proto
 FromVCSECMessage {
-	sessionInfo {
+	sessionInfo: SessionInfo {
 		publicKey: <vehicle's ephemeral key>
 	}
 }
@@ -173,9 +185,9 @@ Now that you have the `ephemeral_key`, generate an AES secret from the `ephemera
 
 ## Authenticating
 For the vehicle to know that you are connected and to be able to send/receive messages, you need to generate an authentication message in the following format:
-```
+```proto
 UnsignedMessage {
-	authenticationResponse {
+	authenticationResponse: AuthenticationResponse {
 		authenticationLevel: AUTHENTICATION_LEVEL_NONE
 	}
 }
@@ -189,9 +201,9 @@ For example, if `counter` is 23, the nonce will be `b'\x00\x00\x00\x17'`.
 You should also separate the encrypted/signed message into 2 variables, `encryptedMsg` (from bytes 0 to `length` - 16), and `msgSignature` (from bytes `length` - 16 to `length`).
 
 Now you can send the message to the vehicle! Use the following format:
-```
+```proto
 ToVCSECMessage {
-	signedMessage {
+	signedMessage: SignedMessage {
 		protobufMessageAsBytes: <encryptedMsg>
 		signature: <msgSignature>
 		counter: <counter>
@@ -207,18 +219,18 @@ Once complete, as long as you stay connected to the vehicle's BLE, your key will
 If you want to let the vehicle do things automatically without sending messages to do things (i.e. like the Tesla App does when you're next to/inside the vehicle), you can send it an authentication response of a higher level to give permission to do everything under and including that level, so say `level = 'UNLOCK'`, you are only letting the vehicle unlock, but say you do `level = 'DRIVE'`, you can unlock *or* drive. Also, everytime the vehicle does something automatically, the vehicle resets level to `NONE`.
 
 All that you have to do is serialize and sign an auth message where the distance is optional, but if not sent to the vehicle, it will just automatically assume that you're next to/inside the vehicle:
-```
+```proto
 UnsignedMessage {
-	AuthenticationResponse {
+	AuthenticationResponse: AuthenticationResponse {
 		authenticationLevel: AUTHENTICATION_LEVEL_<LEVEL>
 		estimatedDistance: <distance> # optional
 	}
 }
 ```
 Once you sign that message, I'll call it `signedAuthMsg`, and its signature `signedAuthSign`, and turn it into a ToVCSECMessage message like this, which you then serialize, prepend the length, and send to the vehicle:
-```
+```proto
 ToVCSECMessage {
-	signedMessage {
+	signedMessage: SignedMessage {
 		protobufMessageAsBytes: <signedAuthMsg>
 		signature: <signedAuthSign>
 		counter: <counter>
@@ -229,20 +241,20 @@ ToVCSECMessage {
 
 :::note
 I recommend only changing this to other auth levels when the car requests it. Here's an example of a message you may get from the car, requesting to unlock it:
-```
+```proto
 FromVCSECMessage {
-	authenticationRequest {
-	sessionInfo {
-		token: "some random token that i don't know the use of"
-	}
-	requestedLevel: AUTHENTICATION_LEVEL_DRIVE
+	authenticationRequest: AuthenticationRequest {
+		sessionInfo: SessionInfo {
+			token: "some random token that i don't know the use of"
+		}
+		requestedLevel: AUTHENTICATION_LEVEL_DRIVE
 	}
 }
 ```
 In this case you'll just send the car back the following message:
-```
+```proto
 UnsignedMessage {
-	AuthenticationResponse {
+	AuthenticationResponse: AuthenticationResponse {
 		authenticationLevel: AUTHENTICATION_LEVEL_DRIVE
 	}
 }
@@ -251,7 +263,7 @@ Don't worry about the walk-away car lock, when you walk away the car will automa
 :::
 ## Sending manual actions
 Say a user interacts with an app or needs to do something that can't be done automatically. In that case you need to send an RKE action. You can send those by making a message in the following format, signing it, prepending length, and sending it to the vehicle like with any other signed message:
-```
+```proto
 UnsignedMessage {
 	RKEAction_E: <any rke action>
 }

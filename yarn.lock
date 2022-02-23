@@ -7438,6 +7438,11 @@ react-side-effect@^2.1.0:
   resolved "https://registry.yarnpkg.com/react-side-effect/-/react-side-effect-2.1.1.tgz#66c5701c3e7560ab4822a4ee2742dee215d72eb3"
   integrity sha512-2FoTQzRNTncBVtnzxFOk2mCpcfxQpenBMbk5kSVBg5UcPqV9fRbgY2zhb7GTWWOlpFmAxhClBDlIq8Rsubz1yQ==
 
+react-spoiler@^0.4.3:
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/react-spoiler/-/react-spoiler-0.4.3.tgz#b7dc0365f68016c72e8431c9bf1f91b8127ef792"
+  integrity sha512-fHj8pUAkQkuLJ6oR0+Rtuqaqbrwe5kzAdNkc+bWhghYONL3mfEBu7/y8d11j4Cx2miCTvTRexFKquru+aP8V6w==
+
 react-textarea-autosize@^8.3.2:
   version "8.3.3"
   resolved "https://registry.yarnpkg.com/react-textarea-autosize/-/react-textarea-autosize-8.3.3.tgz#f70913945369da453fd554c168f6baacd1fa04d8"
