@@ -299,7 +299,7 @@ if decodedMsg.commandStatus.whitelistOperationStatus.operationStatus == VCSEC.Op
 ## Getting the ephemeral key
 To sign messages to send to the vehicle, you'll need to get the vehicle's ephemeral key.
 
-By definition, this name should change every so often, but I never experienced it change in the few days of testing that I've done.
+By definition of its name, this key should change every so often, but I never experienced it change in the many months of testing that I've done.
 
 First, generate the `keyId`. This can be done by taking the first 4 bytes of a SHA1 digest of `publicKey`.
 
@@ -330,7 +330,7 @@ Now that you have the `ephemeral_key`, generate an AES secret from the `ephemera
 
 ## Authenticating
 :::warning
-Due to Tesla's implementation of message signing, you are *required* to use a 4 byte long nonce, which is a problem as it might be deemed insecure by some libraries (such as the one in the example this section), and they must be modified to remove the limit, or the encryption must be done without a library if that such a modified library is not available.
+Due to Tesla's implementation of message signing, you are *required* to use a 4 byte long nonce, which is a problem as it might be deemed insecure by some libraries (such as the one in the example of this section), and they must be modified to remove the limit, or the encryption must be done without a library if that such a modified library is not available.
 :::
 For the vehicle to know that you are connected and to be able to send/receive messages, you need to generate an authentication message in the following format:
 ```proto
