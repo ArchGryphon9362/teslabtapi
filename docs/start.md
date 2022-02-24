@@ -334,7 +334,6 @@ Now that you have the `ephemeralKey`, generate an AES secret from the `ephemeral
 ```py
 # Import the VCSEC and the crypto libraries
 import VCSEC
-from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives import hashes, serialization
 
@@ -443,7 +442,7 @@ UnsignedMessage {
 	}
 }
 ```
-Set a variable called `counter` to 1 (can be any number that hasn't been used as the counter for this key and must be >= 1), which you should increment (or change to an unused one) each time after using.
+Set a variable called `counter` to 1 (can be any number that hasn't been used as the counter for this key and must match the rule `counter >= 1 and counter <= 65535`), which you should increment (or change to an unused one) each time after using.
 
 Now, you need to encrypt this message using the `sharedKey` with AES encryption in GCM mode, with a nonce of the `counter`, split into 4 bytes in big-endian, where the most significant byte is at the end.
 
@@ -467,6 +466,99 @@ ToVCSECMessage {
 Now, prepare the message by serializing and prepending the length of the message. It is now ready to be sent to the vehicle!
 
 Once complete, as long as you stay connected to the vehicle's BLE, your key will stay marked in the vehicle as an active key.
+
+<details>
+<summary>Python Example</summary>
+
+```py
+import VCSEC
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+from cryptography.hazmat.primitives.asymmetric import ec
+from cryptography.hazmat.primitives import hashes, serialization
+
+# Function to prepend message length
+def prependLength(message):
+    return (len(message).to_bytes(2, 'big') + message)
+
+try:
+    # Try to open and import private key
+    privKeyFile = open('private_key.pem', 'rb')
+    privateKey = serialization.load_pem_private_key(privKeyFile.read(), None)
+    privKeyFile.close()
+except FileNotFoundError:
+    # If private key file not found, generate private keys
+    privateKey = ec.generate_private_key(ec.SECP256R1())
+
+# Derive public key in X9.62 Uncompressed Point Encoding
+publicKey = privateKey.public_key().public_bytes(serialization.Encoding.X962, serialization.PublicFormat.UncompressedPoint)
+
+# Hash our public key to get our key id and extract the first 4 bytes
+digest = hashes.Hash(hashes.SHA1())
+digest.update(publicKey)
+keyId = digest.finalize()[:4]
+
+# Example Ephemeral Key
+ephemeralKey = b'\x04\x79\xc0\x50\x4a\x21\x6f\xfc\x26\x46\xb7\x57\x80\x39\x9f\x1c\xe1\x23\xf4\x01\x56\x1b\x68\x5c\x31\x83\x64\xfa\x96\xcc\x3f\xe6\x7a\x5a\xc5\x04\x8c\x44\x7a\xf8\x8d\x91\x52\x86\x5a\x1e\xfc\x15\xbb\xd5\x68\x98\xdd\x2c\x46\xf7\xa1\x9b\xad\x4f\xb2\x80\x52\xc4\x60'
+
+# Put the known curve of the key into a variable
+curve = ec.SECP256R1()
+# Use the curve to put the ephemeral key into a workable format
+ephemeralKey = ec.EllipticCurvePublicKey.from_encoded_point(curve, ephemeralKey)
+# Prepare a hasher
+hasher = hashes.Hash(hashes.SHA1())
+# Derive an AES secret from our private key and the car's public key
+aesSecret = privateKey.exchange(ec.ECDH(), ephemeralKey)
+# Put the AES secret into the hasher
+hasher.update(aesSecret)
+# Put the first 16 bytes of the hash into a shared key variable
+sharedKey = hasher.finalize()[:16]
+
+# Create an authentication response message with a level of none
+authenticationResponse = VCSEC.AuthenticationResponse()
+authenticationResponse.authenticationLevel = VCSEC.AuthenticationLevel_E.AUTHENTICATION_LEVEL_NONE
+
+# Put that message on an unsigned message and serialize it
+unsignedMessage = VCSEC.UnsignedMessage()
+unsignedMessage.authenticationResponse.CopyFrom(authenticationResponse)
+unsignedMessageS = unsignedMessage.SerializeToString()
+
+# Print out the unsigned message layout for information purposes
+print("Unsigned Message Layout:")
+print(unsignedMessage)
+
+# Set counter to 1 and create a nonce from it
+counter = 1
+nonce = int.to_bytes(counter, 4, "big")
+
+# Initialize an AES encryptor in GCM mode and encrypt the message using it
+encryptor = AESGCM(sharedKey)
+encryptedMsgWithTag = encryptor.encrypt(nonce, unsignedMessageS, None)
+
+# Put all of this onto a "signed message" variable
+signedMessage = VCSEC.SignedMessage()
+signedMessage.protobufMessageAsBytes = encryptedMsgWithTag[:-16]
+signedMessage.counter = counter
+signedMessage.signature = encryptedMsgWithTag[-16:]
+signedMessage.keyId = keyId
+
+# Put all of this onto a "to vcsec" message
+toVCSECMessage = VCSEC.ToVCSECMessage()
+toVCSECMessage.signedMessage.CopyFrom(signedMessage)
+
+# Print it out for information purposes
+print("\nTo VCSEC Message Layout:")
+print(toVCSECMessage)
+
+# Serialize the message and prepend the length
+msg = toVCSECMessage.SerializeToString()
+msg = prependLength(msg)
+
+# Print the message to be sent to the car
+print("\nAuth Message To Send To Car:")
+print(msg.hex(" "))
+```
+
+</details>
 
 ## Authenticating for other things
 If you want to let the vehicle do things automatically without sending messages to do things (i.e. like the Tesla App does when you're next to/inside the vehicle), you can send it an authentication response of a higher level to give permission to do everything under and including that level, so say `level = 'UNLOCK'`, you are only letting the vehicle unlock, but say you do `level = 'DRIVE'`, you can unlock *or* drive. Also, everytime the vehicle does something automatically, the vehicle resets level to `NONE`.
@@ -493,7 +585,7 @@ ToVCSECMessage {
 ```
 
 :::note
-I recommend only changing this to other auth levels when the car requests it. Here's an example of a message you may get from the car, requesting to unlock it:
+I recommend only changing this to other auth levels when the car requests it. Here's an example of a message you may get from the car, requesting to unlock it (yes I know this says drive, but that's just how it is):
 ```proto
 FromVCSECMessage {
 	authenticationRequest: AuthenticationRequest {

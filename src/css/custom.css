@@ -61,3 +61,19 @@ html[data-theme='light'] details {
   border-bottom-width: 2px;
   border-right-width: 2px;
 }
+
+.prism-code {
+  counter-reset: line-number;
+}
+
+.prism-code[class*=language-] .token-line::before {
+  counter-increment: line-number;
+  content: counter(line-number);
+  margin-right: calc(var(--ifm-pre-padding) * 1.5);
+  text-align: right;
+  min-width: 2.5rem;
+  display: inline-block;
+  opacity: .3;
+  position: sticky;
+  left: var(--ifm-pre-padding);
+}
