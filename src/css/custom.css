@@ -43,12 +43,14 @@ html[data-theme='light'] code {
 }
 
 html[data-theme='dark'] details {
+  color: #ff79c6;
   background-color: #282a36;
   border-color: #ff79c6;
   border-width: 1.5px;
 }
 
 html[data-theme='light'] details {
+  color: #00009f;
   background-color: #f6f8fa;
   border-color: #00009f;
   border-width: 1.5px;
