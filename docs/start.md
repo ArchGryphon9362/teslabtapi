@@ -611,13 +611,225 @@ UnsignedMessage {
 ```
 Don't worry about the walk-away car lock, when you walk away the car will automatically lock
 :::
+
+<details>
+<summary>Python Example</summary>
+
+```py
+import VCSEC
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+from cryptography.hazmat.primitives.asymmetric import ec
+from cryptography.hazmat.primitives import hashes, serialization
+
+# Function to prepend message length
+def prependLength(message):
+    return (len(message).to_bytes(2, 'big') + message)
+
+try:
+    # Try to open and import private key
+    privKeyFile = open('private_key.pem', 'rb')
+    privateKey = serialization.load_pem_private_key(privKeyFile.read(), None)
+    privKeyFile.close()
+except FileNotFoundError:
+    # If private key file not found, generate private keys
+    privateKey = ec.generate_private_key(ec.SECP256R1())
+
+# Derive public key in X9.62 Uncompressed Point Encoding
+publicKey = privateKey.public_key().public_bytes(serialization.Encoding.X962, serialization.PublicFormat.UncompressedPoint)
+
+# Hash our public key to get our key id and extract the first 4 bytes
+digest = hashes.Hash(hashes.SHA1())
+digest.update(publicKey)
+keyId = digest.finalize()[:4]
+
+# Example Ephemeral Key
+ephemeralKey = b'\x04\x79\xc0\x50\x4a\x21\x6f\xfc\x26\x46\xb7\x57\x80\x39\x9f\x1c\xe1\x23\xf4\x01\x56\x1b\x68\x5c\x31\x83\x64\xfa\x96\xcc\x3f\xe6\x7a\x5a\xc5\x04\x8c\x44\x7a\xf8\x8d\x91\x52\x86\x5a\x1e\xfc\x15\xbb\xd5\x68\x98\xdd\x2c\x46\xf7\xa1\x9b\xad\x4f\xb2\x80\x52\xc4\x60'
+
+# Put the known curve of the key into a variable
+curve = ec.SECP256R1()
+# Use the curve to put the ephemeral key into a workable format
+ephemeralKey = ec.EllipticCurvePublicKey.from_encoded_point(curve, ephemeralKey)
+# Prepare a hasher
+hasher = hashes.Hash(hashes.SHA1())
+# Derive an AES secret from our private key and the car's public key
+aesSecret = privateKey.exchange(ec.ECDH(), ephemeralKey)
+# Put the AES secret into the hasher
+hasher.update(aesSecret)
+# Put the first 16 bytes of the hash into a shared key variable
+sharedKey = hasher.finalize()[:16]
+
+# Example of an auth request message
+exampleAuthMsgRcvd = b'\x00\x0c\x1a\x0a\x12\x06\x0a\x04\x00\x01\x0f\x2c\x18\x02'
+# Extract the length
+exampleAuthMsgRcvdLen = int.from_bytes(exampleAuthMsgRcvd[0:2], "big")
+
+# Make sure the length is correct
+if len(exampleAuthMsgRcvd[2:]) == exampleAuthMsgRcvdLen:
+    print("Message Length Correct")
+else:
+    print("Message Not Of Expected Length, Exiting...")
+    exit()
+
+fromVCSEC = VCSEC.FromVCSECMessage()
+fromVCSEC.ParseFromString(exampleAuthMsgRcvd[2:])
+
+print("Auth Request Message Layout:")
+print(fromVCSEC)
+
+# Create an authentication response message with the level requested
+authenticationResponse = VCSEC.AuthenticationResponse()
+authenticationResponse.authenticationLevel = fromVCSEC.authenticationRequest.requestedLevel
+
+# Put that message on an unsigned message and serialize it
+unsignedMessage = VCSEC.UnsignedMessage()
+unsignedMessage.authenticationResponse.CopyFrom(authenticationResponse)
+unsignedMessageS = unsignedMessage.SerializeToString()
+
+# Print out the unsigned message response layout for information purposes
+print("\nUnsigned Message Response Layout:")
+print(unsignedMessage)
+
+# Set counter to 2 and create a nonce from it
+counter = 2
+nonce = int.to_bytes(counter, 4, "big")
+
+# Initialize an AES encryptor in GCM mode and encrypt the message using it
+encryptor = AESGCM(sharedKey)
+# This will error out if you're using the latest version of the cryptorgraphy.io library as I'm using a 4 byte long nonce
+try:
+    encryptedMsgWithTag = encryptor.encrypt(nonce, unsignedMessageS, None)
+except ValueError:
+    print("Error: The cryptography.io library doesn't allow nonces as small as 4 bytes anymore. Please modify the if statement in the _check_params(nonce, data, associated_date) function in the cryptography.hazmat.primitives.ciphers.aead.AESGCM class to require the minimum length to be 1")
+    exit()
+
+# Put all of this onto a "signed message" variable
+signedMessage = VCSEC.SignedMessage()
+signedMessage.protobufMessageAsBytes = encryptedMsgWithTag[:-16]
+signedMessage.counter = counter
+signedMessage.signature = encryptedMsgWithTag[-16:]
+signedMessage.keyId = keyId
+
+# Put all of this onto a "to vcsec" message
+toVCSECMessage = VCSEC.ToVCSECMessage()
+toVCSECMessage.signedMessage.CopyFrom(signedMessage)
+
+# Print it out for information purposes
+print("\nTo VCSEC Message Layout:")
+print(toVCSECMessage)
+
+# Serialize the message and prepend the length
+msg = toVCSECMessage.SerializeToString()
+msg = prependLength(msg)
+
+# Print the message to be responded to the car with
+print("\nAuth Message To Send To Car:")
+print(msg.hex(" "))
+```
+
+</details>
+
 ## Sending manual actions
 Say a user interacts with an app or needs to do something that can't be done automatically. In that case you need to send an RKE action. You can send those by making a message in the following format, signing it, prepending length, and sending it to the vehicle like with any other signed message:
 ```proto
 UnsignedMessage {
-	RKEAction_E: <any rke action>
+	RKEAction: <any rke action>
 }
 ```
+
+<details>
+<summary>Python Example</summary>
+
+```py
+import VCSEC
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+from cryptography.hazmat.primitives.asymmetric import ec
+from cryptography.hazmat.primitives import hashes, serialization
+
+# Function to prepend message length
+def prependLength(message):
+    return (len(message).to_bytes(2, 'big') + message)
+
+try:
+    # Try to open and import private key
+    privKeyFile = open('private_key.pem', 'rb')
+    privateKey = serialization.load_pem_private_key(privKeyFile.read(), None)
+    privKeyFile.close()
+except FileNotFoundError:
+    # If private key file not found, generate private keys
+    privateKey = ec.generate_private_key(ec.SECP256R1())
+
+# Derive public key in X9.62 Uncompressed Point Encoding
+publicKey = privateKey.public_key().public_bytes(serialization.Encoding.X962, serialization.PublicFormat.UncompressedPoint)
+
+# Hash our public key to get our key id and extract the first 4 bytes
+digest = hashes.Hash(hashes.SHA1())
+digest.update(publicKey)
+keyId = digest.finalize()[:4]
+
+# Example Ephemeral Key
+ephemeralKey = b'\x04\x79\xc0\x50\x4a\x21\x6f\xfc\x26\x46\xb7\x57\x80\x39\x9f\x1c\xe1\x23\xf4\x01\x56\x1b\x68\x5c\x31\x83\x64\xfa\x96\xcc\x3f\xe6\x7a\x5a\xc5\x04\x8c\x44\x7a\xf8\x8d\x91\x52\x86\x5a\x1e\xfc\x15\xbb\xd5\x68\x98\xdd\x2c\x46\xf7\xa1\x9b\xad\x4f\xb2\x80\x52\xc4\x60'
+
+# Put the known curve of the key into a variable
+curve = ec.SECP256R1()
+# Use the curve to put the ephemeral key into a workable format
+ephemeralKey = ec.EllipticCurvePublicKey.from_encoded_point(curve, ephemeralKey)
+# Prepare a hasher
+hasher = hashes.Hash(hashes.SHA1())
+# Derive an AES secret from our private key and the car's public key
+aesSecret = privateKey.exchange(ec.ECDH(), ephemeralKey)
+# Put the AES secret into the hasher
+hasher.update(aesSecret)
+# Put the first 16 bytes of the hash into a shared key variable
+sharedKey = hasher.finalize()[:16]
+
+# Put an rke action on an unsigned message and serialize it
+# It will technically be empty, but the default action is to unlock the car as there is nothing else on the unsigned message
+unsignedMessage = VCSEC.UnsignedMessage()
+unsignedMessage.RKEAction = VCSEC.RKEAction_E.RKE_ACTION_UNLOCK
+unsignedMessageS = unsignedMessage.SerializeToString()
+
+# Print out the unsigned message layout for information purposes
+print("Unsigned Message Layout:")
+print(unsignedMessage)
+
+# Set counter to 3 and create a nonce from it
+counter = 3
+nonce = int.to_bytes(counter, 4, "big")
+
+# Initialize an AES encryptor in GCM mode and encrypt the message using it
+encryptor = AESGCM(sharedKey)
+# This will error out if you're using the latest version of the cryptorgraphy.io library as I'm using a 4 byte long nonce
+try:
+    encryptedMsgWithTag = encryptor.encrypt(nonce, unsignedMessageS, None)
+except ValueError:
+    print("Error: The cryptography.io library doesn't allow nonces as small as 4 bytes anymore. Please modify the if statement in the _check_params(nonce, data, associated_date) function in the cryptography.hazmat.primitives.ciphers.aead.AESGCM class to require the minimum length to be 1")
+    exit()
+
+# Put all of this onto a "signed message" variable
+signedMessage = VCSEC.SignedMessage()
+signedMessage.protobufMessageAsBytes = encryptedMsgWithTag[:-16]
+signedMessage.counter = counter
+signedMessage.signature = encryptedMsgWithTag[-16:]
+signedMessage.keyId = keyId
+
+# Put all of this onto a "to vcsec" message
+toVCSECMessage = VCSEC.ToVCSECMessage()
+toVCSECMessage.signedMessage.CopyFrom(signedMessage)
+
+# Print it out for information purposes
+print("\nTo VCSEC Message Layout:")
+print(toVCSECMessage)
+
+# Serialize the message and prepend the length
+msg = toVCSECMessage.SerializeToString()
+msg = prependLength(msg)
+
+# Print the message to be sent to the car
+print("\nRKE Action Message To Send To Car:")
+print(msg.hex(" "))
+```
+
+</details>
 
 ## More Info
 For more info, you can begin looking at [ToVCSECMessage](tovcsec) ([UnsignedMessage](other/unsignedmsg) in particular) to see things you can send to the car, and [FromVCSECMessage](fromvcsec) to see things you receive to the car.
