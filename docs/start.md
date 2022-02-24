@@ -326,7 +326,110 @@ FromVCSECMessage {
 	}
 }
 ```
-Now that you have the `ephemeral_key`, generate an AES secret from the `ephemeral_key` and your secret key. Next, make a SHA1 of it, and put take the first 16 bytes to form your `sharedKey`.
+Now that you have the `ephemeralKey`, generate an AES secret from the `ephemeralKey` and your secret key. Next, make a SHA1 of it, and put take the first 16 bytes to form your `sharedKey`.
+
+<details>
+<summary>Python Example</summary>
+
+```py
+# Import the VCSEC and the crypto libraries
+import VCSEC
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+from cryptography.hazmat.primitives.asymmetric import ec
+from cryptography.hazmat.primitives import hashes, serialization
+
+# Function to prepend message length
+def prependLength(message):
+    return (len(message).to_bytes(2, 'big') + message)
+
+try:
+    # Try to open and import private key
+    privKeyFile = open('private_key.pem', 'rb')
+    privateKey = serialization.load_pem_private_key(privKeyFile.read(), None)
+    privKeyFile.close()
+except FileNotFoundError:
+    # If private key file not found, generate private keys
+    privateKey = ec.generate_private_key(ec.SECP256R1())
+
+# Derive public key in X9.62 Uncompressed Point Encoding
+publicKey = privateKey.public_key().public_bytes(serialization.Encoding.X962, serialization.PublicFormat.UncompressedPoint)
+
+# Hash our public key to get our key id and extract the first 4 bytes
+digest = hashes.Hash(hashes.SHA1())
+digest.update(publicKey)
+keyId = digest.finalize()[:4]
+
+# Create a "key identifier" message and assign our key id to it
+keyIdentifier = VCSEC.KeyIdentifier()
+keyIdentifier.publicKeySHA1 = keyId
+
+# Create an "information request" message and set its request type and our key id
+informationRequest = VCSEC.InformationRequest()
+informationRequest.informationRequestType = VCSEC.InformationRequestType.INFORMATION_REQUEST_TYPE_GET_EPHEMERAL_PUBLIC_KEY
+informationRequest.keyId.CopyFrom(keyIdentifier)
+
+# Put the information request message on an unsigned message
+unsignedMessage = VCSEC.UnsignedMessage()
+unsignedMessage.InformationRequest.CopyFrom(informationRequest)
+
+# Put all of that onto a to vcsec message
+toVCSEC = VCSEC.ToVCSECMessage()
+toVCSEC.unsignedMessage.CopyFrom(unsignedMessage)
+
+# Print the layout for information purposes
+print("To VCSEC Message Layout:")
+print(toVCSEC)
+
+# Serialize it, prepend the length, and print it out for sending
+getEphemeralBytes = toVCSEC.SerializeToString()
+prependedMessage = prependLength(getEphemeralBytes)
+print("Ephemeral Key Request Message:")
+print(prependedMessage.hex(" "))
+
+# Example of a message you get in response
+exampleMsgResponse = b'\x00\x45\x12\x43\x1a\x41\x04\x79\xc0\x50\x4a\x21\x6f\xfc\x26\x46\xb7\x57\x80\x39\x9f\x1c\xe1\x23\xf4\x01\x56\x1b\x68\x5c\x31\x83\x64\xfa\x96\xcc\x3f\xe6\x7a\x5a\xc5\x04\x8c\x44\x7a\xf8\x8d\x91\x52\x86\x5a\x1e\xfc\x15\xbb\xd5\x68\x98\xdd\x2c\x46\xf7\xa1\x9b\xad\x4f\xb2\x80\x52\xc4\x60'
+# Extract the length
+exampleMsgResponseLen = int.from_bytes(exampleMsgResponse[0:2], "big")
+
+# Make sure the length is correct
+if len(exampleMsgResponse[2:]) == exampleMsgResponseLen:
+    print("\nMessage Length Correct")
+else:
+    print("\nMessage Not Of Expected Length, Exiting...")
+    exit()
+
+# Parse the message into a variable that we can work with
+fromVCSEC = VCSEC.FromVCSECMessage()
+fromVCSEC.ParseFromString(exampleMsgResponse[2:])
+
+# Print out its layout for information purposes
+print("Example Response Message Layout:")
+print(fromVCSEC)
+
+# Extract the ephemeral key
+ephemeralKey = fromVCSEC.sessionInfo.publicKey
+print("Extracted Ephemeral Key:")
+print(ephemeralKey.hex(" "))
+
+# Put the known curve of the key into a variable
+curve = ec.SECP256R1()
+# Use the curve to put the ephemeral key into a workable format
+ephemeralKey = ec.EllipticCurvePublicKey.from_encoded_point(curve, ephemeralKey)
+# Prepare a hasher
+hasher = hashes.Hash(hashes.SHA1())
+# Derive an AES secret from our private key and the car's public key
+aesSecret = privateKey.exchange(ec.ECDH(), ephemeralKey)
+# Put the AES secret into the hasher
+hasher.update(aesSecret)
+# Put the first 16 bytes of the hash into a shared key variable
+sharedKey = hasher.finalize()[:16]
+
+# Print the shared key for information purposes
+print("\nShared Key:")
+print(sharedKey.hex(' '))
+```
+
+</details>
 
 ## Authenticating
 :::warning
