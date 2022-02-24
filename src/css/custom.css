@@ -73,7 +73,14 @@ html[data-theme='light'] details {
   text-align: right;
   min-width: 2.5rem;
   display: inline-block;
-  opacity: .3;
   position: sticky;
   left: var(--ifm-pre-padding);
+}
+
+html[data-theme='dark'] .prism-code[class*=language-] .token-line::before {
+  color: #ff79c6;
+}
+
+html[data-theme='light'] .prism-code[class*=language-] .token-line::before {
+  color: #00009f;
 }

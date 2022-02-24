@@ -532,7 +532,12 @@ nonce = int.to_bytes(counter, 4, "big")
 
 # Initialize an AES encryptor in GCM mode and encrypt the message using it
 encryptor = AESGCM(sharedKey)
-encryptedMsgWithTag = encryptor.encrypt(nonce, unsignedMessageS, None)
+# This will error out if you're using the latest version of the cryptorgraphy.io library as I'm using a 4 byte long nonce
+try:
+    encryptedMsgWithTag = encryptor.encrypt(nonce, unsignedMessageS, None)
+except ValueError:
+    print("Error: The cryptography.io library doesn't allow nonces as small as 4 bytes anymore. Please modify the if statement in the _check_params(nonce, data, associated_date) function in the cryptography.hazmat.primitives.ciphers.aead.AESGCM class to require the minimum length to be 1")
+    exit()
 
 # Put all of this onto a "signed message" variable
 signedMessage = VCSEC.SignedMessage()
