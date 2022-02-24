@@ -55,3 +55,9 @@ html[data-theme='light'] details {
   border-color: #00009f;
   border-width: 1.5px;
 }
+
+.admonition {
+  border-top-width: 2px;
+  border-bottom-width: 2px;
+  border-right-width: 2px;
+}
