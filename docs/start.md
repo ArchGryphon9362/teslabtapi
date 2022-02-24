@@ -81,6 +81,7 @@ Descriptor: 0x2901
 <summary>Python Example</summary>
 
 ```py
+# Import VCSEC and crypto libraries
 import VCSEC
 from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives import serialization
@@ -89,8 +90,16 @@ from cryptography.hazmat.primitives import serialization
 def prepend_length(message):
 	return (len(message).to_bytes(2, 'big') + message)
 
-# Generate private keys, and derive public key in X9.62 Uncompressed Point Encoding
-privateKey = ec.generate_private_key(ec.SECP256R1())
+try:
+    # Try to open and import private key
+    privKeyFile = open('private_key.pem', 'rb')
+    privateKey = serialization.load_pem_private_key(privKeyFile.read(), None)
+    privKeyFile.close()
+except FileNotFoundError:
+    # If private key file not found, generate private keys
+    privateKey = ec.generate_private_key(ec.SECP256R1())
+
+# Derive public key in X9.62 Uncompressed Point Encoding
 publicKey = privateKey.public_key().public_bytes(serialization.Encoding.X962, serialization.PublicFormat.UncompressedPoint)
 
 # Print the public key for information purposes
@@ -171,16 +180,28 @@ The vehicle's BLE name is fairly easy to figure out. You need to do the followin
 <summary>Python Example</summary>
 
 ```py
+# Import Crypto Library
 from cryptography.hazmat.primitives import hashes
 
+# Example VIN As Bytestring
 vin = bytes("5YJ3E1EA1KF000000", "UTF8")
 
+# Create A SHA1 Hasher
 digest = hashes.Hash(hashes.SHA1())
+
+# Put VIN Into The Hasher
 digest.update(vin)
+
+# Set vinSHA To The Hex String Of The VIN Hash
 vinSHA = digest.finalize().hex()
+
+# Get The First 16 Characters
 middleSection = vinSHA[0:16]
+
+# Prepend S And Append ? As We Don't Know The Last Character
 bleName = "S" + middleSection + "?"
 
+# Print The Final BLE Name
 print(bleName) # Sa6bab0d54ffaecf1?
 ```
 
@@ -214,11 +235,66 @@ FromVCSECMessage {
 			signerOfOperation: KeyIdentifier {
 				publicKeySHA1: 0x5f0d64b3
 			}
+			operationStatus: OPERATIONSTATUS_OK # usually won't get printed out along
+												# with the message as its tag is 0, and
+												# therefore it gets truncated from the
+												# message, but that is the default value
+												# of the enum when there is no value
 		}
 	}
 }
 ```
 Congrats! You whitelisted your first key!
+
+<details>
+<summary>Python Example</summary>
+
+```py
+# Import VCSEC Library
+import VCSEC
+
+# Example Message That You Should Receive Upon Sending The Whitelist MEssage
+exampleMsgRcvd = b'\x00\x04\x22\x02\x08\x01'
+# Extracting The Expected Length Of The Message
+expectedLength = int.from_bytes(exampleMsgRcvd[0:2], "big")
+
+# Make Sure Message Of Expected Length
+if len(exampleMsgRcvd[2:]) == expectedLength:
+    print("Message Length Correct!")
+else:
+    print("Message Not Expected Length, Exiting...")
+    exit()
+
+# Decode The Received Message
+decodedMsg = VCSEC.FromVCSECMessage()
+decodedMsg.ParseFromString(exampleMsgRcvd[2:])
+
+# Check If The Car Is Telling Us To Wait For Something To Happen (the keycard getting tapped in this case)
+if decodedMsg.commandStatus.operationStatus == VCSEC.OperationStatus_E.OPERATIONSTATUS_WAIT:
+    print("Car Asking To Tap Key Card!")
+
+# Key Card Tapped Example Message
+exampleKCTappedMsgRcvd = b'\x00\x0c\x22\x0a\x1a\x08\x12\x06\x0a\x04\x5f\x0d\x64\xb3'
+# Extract The Length
+expectedKCTappedLength = int.from_bytes(exampleKCTappedMsgRcvd[0:2], "big")
+
+# Check If The Message Length Is Correct
+if len(exampleKCTappedMsgRcvd[2:]) == expectedKCTappedLength:
+    print("\nKey Card Tapped Message Length Correct!")
+else:
+    print("\nKey Card Tapped Message Not Expected Length, Exiting...")
+    exit()
+
+# Decode The Message
+decodedMsg = VCSEC.FromVCSECMessage()
+decodedMsg.ParseFromString(exampleKCTappedMsgRcvd[2:])
+
+# Check If Everything Is Ok
+if decodedMsg.commandStatus.whitelistOperationStatus.operationStatus == VCSEC.OperationStatus_E.OPERATIONSTATUS_OK:
+    print("Key Card Tapped!")
+```
+
+</details>
 
 ## Getting the ephemeral key
 To sign messages to send to the vehicle, you'll need to get the vehicle's ephemeral key.
