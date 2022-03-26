@@ -11,7 +11,7 @@ Tesla has updated their VCSEC for the new Model S and X, among other things. I'm
 
 **Once I extract the protobuf, you'll be able to choose between the new and old version of the documentation!**
 
-**Edit:** I have extracted the new protobuf (and created a personal script to do so easily in the future), the new protobuf file can be found [here](https://gist.github.com/ArchGryphon9362/2b1112849d3748c775877696b8c05ed7) if you want it :). Currently in the process of documenting it!
+**Edit:** I have extracted the new protobuf (and created a personal script to do so easily in the future), the new protobuf file can be found [here](https://gist.github.com/ArchGryphon9362/2b1112849d3748c775877696b8c05ed7) if you want it :). Will document it when I have time... if you want to contribute, you can document it using Docusaurus's version system, and then create a PR!
 :::
 :::tip
 I really recommend reading this over to grasp an understanding of how this stuff works. If you just want to see what the car can do, skip down to [more info](#more-info).
