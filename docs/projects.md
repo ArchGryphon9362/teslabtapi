@@ -12,7 +12,7 @@ sidebar_position: 8
 
 ## Python Libraries
 - [pyteslable](https://pypi.org/project/pyteslable/) - Library with easy to use wrappers for controlling your Tesla vehicle.
-  - `Creators` - kaedenb - ArchGryphon9362
+  - `Creators` - kaedenb + ArchGryphon9362
 
 ---
 
