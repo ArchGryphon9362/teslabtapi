@@ -8,7 +8,7 @@ sidebar_position: 8
 - [Watt Key](https://play.google.com/store/apps/details?id=com.joshendy.wattkey) - Control your Tesla via Bluetooth from your Wear OS watch.
   - `Creator` - Joshendy
 - [TeslaKee](https://www.teslakee.com/) (Unreleased) - More secure version of the Tesla app, when released, will have customizable passive entry features among other things, to increase security of your vehicle.
-  - `Creator` - Martin Herfurt
+  - `Creator` - trifinite
 
 ## Python Libraries
 - [pyteslable](https://pypi.org/project/pyteslable/) - Library with easy to use wrappers for controlling your Tesla vehicle.

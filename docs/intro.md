@@ -23,7 +23,7 @@ Using most of the following information requires knowledge in the following area
 
 ## Get started
 
-First of all, you'll need the proto file which you can grab from [GitHub](https://gist.github.com/ArchGryphon9362/fc55736f5bb5f2b19c12f68abe0ed3f7).
+First of all, you'll need the proto file which you can grab from [GitHub](https://github.com/trifinite/vcsec-archive/tree/master/protos), credit to trifinite for extracting them!
 Next generate the source/header files for your respective language ([see this page](https://developers.google.com/protocol-buffers/docs/overview#generating)).
 
 To begin, go to the [getting started](start) section.
