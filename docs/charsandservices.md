@@ -8,12 +8,13 @@ The vehicle's BLE name is found using the following method (doesn't give last ch
 - Get the vehicle's VIN, we'll call this `vin`
 - Get a SHA1 hash of it, we'll call this `vinSHA`
 - Get the `vinSHA` as a hex string, and keep only the first 16 characters, we'll call this `middleSection`
-- Prepend "S" to `middleSection` and that is it. We're not sure how to find the last character yet, but you don't have to pay attention to that
-- All that is currently known about the last letter is that it must be one of the following:
+- Prepend "S" to `middleSection` and that is it. The last character is usually C
+- The last letter can be one of the following according to Tesla's app code, but I've never seen that:
   - C
   - R
   - D
   - P
+- Theories by trifinite suggest that they might mean [C]enter, [R]ear, [D]river, and [P]assenger, probably for knowing which beacon you are currently comminicating to, but it doesn't matter
 
 <details>
 <summary>Python Example</summary>
