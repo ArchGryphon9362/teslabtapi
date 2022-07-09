@@ -28,9 +28,9 @@ digest = hashes.Hash(hashes.SHA1())
 digest.update(vin)
 vinSHA = digest.finalize().hex()
 middleSection = vinSHA[0:16]
-bleName = "S" + middleSection + "?"
+bleName = "S" + middleSection + "C"
 
-print(bleName) # Sa6bab0d54ffaecf1?
+print(bleName) # Sa6bab0d54ffaecf1C
 ```
 
 </details>
