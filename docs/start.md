@@ -7,7 +7,7 @@ sidebar_position: 2
 import ReactSpoiler from "react-spoiler";
 
 :::warning
-Tesla has updated their VCSEC for the new Model S and X, among other things. The current stuff should continue to work, but I can't predict for how long it'll continue working. Also, since the car uses 4 byte nonces many libraries will deem this as insecure and won't allow you to do that, and after checking out the new Tesla app, sadly the problem still exists and you must modify these libraries to work with the car :/
+Tesla has updated their VCSEC for the new Model S and X, among other things. The current stuff (in the getting started guide) should continue to work as always, just there are more messages being sent in the later versions, such as Alerts and stuff, so be sure to keep your VCSEC.proto file up to date. Also, since the car uses 4 byte nonces many libraries will deem this as insecure and won't allow you to do that, and after checking out the new Tesla app, sadly the problem still exists and you must modify these libraries to work with the car :/
 :::
 :::tip
 I really recommend reading this over to grasp an understanding of how this stuff works. If you just want to see what the car can do, skip down to [more info](#more-info).
