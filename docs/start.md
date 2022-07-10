@@ -607,7 +607,7 @@ UnsignedMessage {
 	}
 }
 ```
-Don't worry about the walk-away car lock, when you walk away the car will automatically lock
+Don't worry about the walk-away car lock, when you walk away the car will automatically lock, although I believe in the newer VCSEC version you send the RKE action "RKE_ACTION_AUTO_SECURE_VEHICLE", in case you want the car to lock automatically (and auto-close the windows if that option is enabled as simply locking doesn't close them, so this would be prefered)
 :::
 
 <details>
