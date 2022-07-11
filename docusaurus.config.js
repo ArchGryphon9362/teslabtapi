@@ -96,6 +96,11 @@ module.exports = {
           label: 'Tutorial',
         },
         {
+          href: 'https://www.lexnastin.com',
+          label: 'Blog',
+          position: 'left',
+        },
+        {
           href: 'https://github.com/ArchGryphon9362/teslabtapi',
           label: 'GitHub',
           position: 'right',
