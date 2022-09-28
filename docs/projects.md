@@ -9,6 +9,8 @@ sidebar_position: 8
   - `Creator` - Joshendy
 - [TeslaKee](https://www.teslakee.com/) (Unreleased) - More secure version of the Tesla app, when released, will have customizable passive entry features among other things, to increase security of your vehicle.
   - `Creator` - trifinite
+- [Virtual Keyfob for Watch](https://apps.apple.com/us/app/virtual-keyfob-for-watch/id6443491799) - A virtual Bluetooth-based keyfob for your Model 3/Y and refreshed X/S. This app will allow you to lock and unlock your car using your Apple Watch without needing the internet.
+  - `Creator` - Modern Stack, Inc
 
 ## Python Libraries
 - [pyteslable](https://pypi.org/project/pyteslable/) - Library with easy to use wrappers for controlling your Tesla vehicle.
