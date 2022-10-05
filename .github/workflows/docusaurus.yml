@@ -10,6 +10,7 @@ on:
       - babel.config.js
       - docusaurus.config.js
       - sidebars.js
+      - Dockerfile
 
 jobs:
   build:
