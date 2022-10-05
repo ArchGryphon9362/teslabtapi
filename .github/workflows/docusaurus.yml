@@ -14,7 +14,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  check_no_build:
+    if: github.event_name != 'workflow_dispatch'
     runs-on: ubuntu-latest
 
     steps:
@@ -24,6 +25,10 @@ jobs:
         pattern: '^(?!.*\[no-build]).*$'
         flags: 'gms'
         error: 'Force no-build!'
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v1.2.0
     - name: Set up Docker Buildx
