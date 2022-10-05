@@ -11,6 +11,7 @@ on:
       - docusaurus.config.js
       - sidebars.js
       - Dockerfile
+  workflow_dispatch:
 
 jobs:
   build:
