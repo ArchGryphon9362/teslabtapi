@@ -95,7 +95,10 @@ try:
     privKeyFile.close()
 except FileNotFoundError:
     # If private key file not found, generate private keys
+    privKeyFile = open('private_key.pem', 'wb')
     privateKey = ec.generate_private_key(ec.SECP256R1())
+    privKeyFile.write(privateKey.private_bytes(serialization.Encoding.PEM, serialization.PrivateFormat.PKCS8, serialization.NoEncryption()))
+    privKeyFile.close()
 
 # Derive public key in X9.62 Uncompressed Point Encoding
 publicKey = privateKey.public_key().public_bytes(serialization.Encoding.X962, serialization.PublicFormat.UncompressedPoint)
@@ -346,7 +349,10 @@ try:
     privKeyFile.close()
 except FileNotFoundError:
     # If private key file not found, generate private keys
+    privKeyFile = open('private_key.pem', 'wb')
     privateKey = ec.generate_private_key(ec.SECP256R1())
+    privKeyFile.write(privateKey.private_bytes(serialization.Encoding.PEM, serialization.PrivateFormat.PKCS8, serialization.NoEncryption()))
+    privKeyFile.close()
 
 # Derive public key in X9.62 Uncompressed Point Encoding
 publicKey = privateKey.public_key().public_bytes(serialization.Encoding.X962, serialization.PublicFormat.UncompressedPoint)
@@ -485,7 +491,10 @@ try:
     privKeyFile.close()
 except FileNotFoundError:
     # If private key file not found, generate private keys
+    privKeyFile = open('private_key.pem', 'wb')
     privateKey = ec.generate_private_key(ec.SECP256R1())
+    privKeyFile.write(privateKey.private_bytes(serialization.Encoding.PEM, serialization.PrivateFormat.PKCS8, serialization.NoEncryption()))
+    privKeyFile.close()
 
 # Derive public key in X9.62 Uncompressed Point Encoding
 publicKey = privateKey.public_key().public_bytes(serialization.Encoding.X962, serialization.PublicFormat.UncompressedPoint)
@@ -630,7 +639,10 @@ try:
     privKeyFile.close()
 except FileNotFoundError:
     # If private key file not found, generate private keys
+    privKeyFile = open('private_key.pem', 'wb')
     privateKey = ec.generate_private_key(ec.SECP256R1())
+    privKeyFile.write(privateKey.private_bytes(serialization.Encoding.PEM, serialization.PrivateFormat.PKCS8, serialization.NoEncryption()))
+    privKeyFile.close()
 
 # Derive public key in X9.62 Uncompressed Point Encoding
 publicKey = privateKey.public_key().public_bytes(serialization.Encoding.X962, serialization.PublicFormat.UncompressedPoint)
@@ -754,7 +766,10 @@ try:
     privKeyFile.close()
 except FileNotFoundError:
     # If private key file not found, generate private keys
+    privKeyFile = open('private_key.pem', 'wb')
     privateKey = ec.generate_private_key(ec.SECP256R1())
+    privKeyFile.write(privateKey.private_bytes(serialization.Encoding.PEM, serialization.PrivateFormat.PKCS8, serialization.NoEncryption()))
+    privKeyFile.close()
 
 # Derive public key in X9.62 Uncompressed Point Encoding
 publicKey = privateKey.public_key().public_bytes(serialization.Encoding.X962, serialization.PublicFormat.UncompressedPoint)
