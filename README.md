@@ -1,4 +1,7 @@
-# Website
+# TeslaBT API
+
+> **Note**
+> If the website is ever down, just go to [Introduction](docs/intro.md) and/or [Getting Started](docs/start.md)
 
 This website is built using [Docusaurus 2](https://docusaurus.io/), a modern static website generator.
 
