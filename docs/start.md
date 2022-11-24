@@ -72,7 +72,6 @@ Once you have serialized `protoMsg`, and prepended the length, send the message 
 ```yaml
 Serivce: 00000211-b2d1-43f0-9b88-960cebf8b91e
 UUID: 00000212-b2d1-43f0-9b88-960cebf8b91e
-Descriptor: 0x2901
 ```
 
 <details>
@@ -226,7 +225,6 @@ It should be received on the following indication characteristic:
 ```yaml
 Serivce: 00000211-b2d1-43f0-9b88-960cebf8b91e
 UUID: 00000213-b2d1-43f0-9b88-960cebf8b91e
-Descriptor: 0x2901
 ```
 Now tap an existing key card, and you should recieve the following message:
 ```proto
