@@ -845,12 +845,12 @@ print(msg.hex(" "))
 </details>
 
 ## More Info
-For more info, you can begin looking at [ToVCSECMessage](tovcsec) ([UnsignedMessage](other/unsignedmsg) in particular) to see things you can send to the car, and [FromVCSECMessage](fromvcsec) to see things you receive to the car.
+For more info, you can begin looking at [ToVCSECMessage](tovcsec) ([UnsignedMessage](other/unsignedmsg) in particular) to see things you can send to the car, and [FromVCSECMessage](fromvcsec) to see things you receive from the car.
 
 Don't forget, VCSEC is the vehicle's secondary security system, so you send `ToVCSECMessage` messages, and the vehicle sends you back `FromVCSECMessage` messages.
 
 :::note
-There is only one exception to this rule: when you added your key as keyfob. In this case you would use `FromKeyfobMessage` instead of `ToVCSECMessage`, and `ToKeyfobMessage` instead of `FromVCSECMessage`.
+There is only one exception to this rule: when you added your key as keyfob. In this case you would use `FromKeyfobMessage` instead of `ToVCSECMessage`, and `ToKeyfobMessage` instead of `FromVCSECMessage`. Those are just subsets of each other and are thefore basically equal.
 
 There is also an exception for tire pressure sensors, but I have absolutely no idea of how they work, and don't have time to research.
 :::
