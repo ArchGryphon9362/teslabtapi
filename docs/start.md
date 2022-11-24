@@ -446,7 +446,7 @@ UnsignedMessage {
 	}
 }
 ```
-Set a variable called `counter` to 1 (can be any unsigned 32 bit number that hasn't been used as the counter for this key, i.e. must match the rule `counter >= 1 and counter <= 4,294,967,295`), which you should increment (or change to an unused one) each time after using.
+Set a variable called `counter` to 1 (can be any unsigned 32 bit number that hasn't been used as the counter for this key, i.e. must match the rule `counter >= 1 and counter <= 4294967295` ((2 ^ 8) ^ 4), which you should increment (or change to an unused one) each time after using.
 
 Now, you need to encrypt this message using the `sharedKey` with AES128 encryption in GCM mode, with a nonce of the `counter`, split into 4 bytes in big-endian, where the least significant (smaller in value) byte is at the end.
 
