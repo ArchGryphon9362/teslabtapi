@@ -444,7 +444,7 @@ UnsignedMessage {
 	}
 }
 ```
-Set a variable called `counter` to 1 which can be any unsigned 32 bit number (must match the rule `counter >= 1 and counter <= 4294967295` (`(2 ^ 8) ^ 4`), and must be greater than the last used counter otherwise the car won't accept it. You must change the counter after each use.
+Set a variable called `counter` to 1 which can be any unsigned 32 bit number (must match the rule `counter >= 1 and counter <= 4294967295`), and must be greater than the last used counter otherwise the car won't accept it. You must change the counter after each use.
 
 Now, you need to encrypt this message using the `sharedKey` with AES128 encryption in GCM mode, with a nonce of the `counter`, split into 4 bytes in big-endian, where the least significant (smaller in value) byte is at the end.
 
