@@ -6,7 +6,7 @@ sidebar_position: 4
 
 ## Don't Write In BLE Receive Callback
 
-In most systems, when they receive a BLE indication, they lock the BLE thread so that nothing changes during processing. The problem here is that some systems might freeze up on a BLE write command inside of a receive callback, and will either cause instability, or the write command not going through. This could also prevent any messages from being received.
+In most systems, when they receive a BLE indication, they lock the BLE thread so that nothing changes during processing. The problem here is that some systems might freeze up on a BLE write command inside of a receive callback, and will either cause instability, or the write command not going through. This could also prevent any new messages from being received either.
 
 To avoid this, my recommendation is to create a queue array of messages to send, and then send them one by one **after** the callback.
 
