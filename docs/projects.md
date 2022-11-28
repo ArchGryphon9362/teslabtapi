@@ -1,8 +1,11 @@
 ---
-sidebar_position: 8
+sidebar_position: 5
 ---
+
 # Projects With Bluetooth Support
+
 ## Apps
+
 - [Drive Electric For Tesla](https://play.google.com/store/apps/details?id=no.klokkprojects.driveelectricfortesla) - Wear OS app that acts as a full blown Tesla app, for your watch. Has NFC, Bluetooth, and internet support.
   - `Creator` - KlokkProjects
   - `Devices` - Wear OS
@@ -20,6 +23,7 @@ sidebar_position: 8
   - `Devices` - Apple Watch
 
 ## Python Libraries
+
 - [pyteslable](https://pypi.org/project/pyteslable/) - Library with easy to use wrappers for controlling your Tesla vehicle.
   - `Creators` - kaedenb + ArchGryphon9362
 

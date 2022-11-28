@@ -14,9 +14,11 @@ I really recommend reading this over to grasp an understanding of how this stuff
 :::
 
 ## Whitelisting your key
+
 To begin working with the vehicle's BLE API, you'll need to generate and whitelist your public key with the vehicle.
 
 To do this, you'll need two things:
+
 - Generate an EC private key with the NISTP256 curve (aka secp256r1, or prime256v1)
   - Keep this safe! This key is used to sign all your messages.
 - Using your private key, you'll need to generate a public key serialized to bytes in the ANSI X9.62/X9.63 Uncompressed Point format
@@ -26,6 +28,7 @@ To do this, you'll need two things:
 We'll call these `privateKey`, and `publicKey` respectively.
 
 Next serialize, an unsigned protobuf message from the VCSEC protobuf in the following layout:
+
 ```proto
 UnsignedMessage {
 	WhitelistOperation: WhitelistOperation {
@@ -44,9 +47,11 @@ UnsignedMessage {
 	}
 }
 ```
+
 You may add any other permissions as needed but these are the default ones (the ones that let you unlock, and start the vehicle, among other things). We'll call the previously serialized message the `protoMsg`.
 
 Once you have it serialized to bytes, you need to make a `ToVCSECMessage` message of the following format:
+
 ```proto
 ToVCSECMessage {
 	signedMessage: SignedMessage {
@@ -55,9 +60,11 @@ ToVCSECMessage {
 	}
 }
 ```
+
 Now, serialize this message to bytes. We'll call this `authMsg`.
 
 We need to prepare this message by defining a function `prependLength`:
+
 - Extends the length of the byte array by two
 - Shifts all bytes to the right by two
 - Sets the first two bytes to the length of the message
@@ -68,7 +75,9 @@ someMsg = b'\x01\x02'
 prependedMsg = prependLength(someMsg)
 print(prependedMsg) # b'\x00\x02\x01\x02'
 ```
+
 Once you have serialized `protoMsg`, and prepended the length, send the message to the vehicle over a normal BluetoothLE connection on the following write characteristic:
+
 ```yaml
 Serivce: 00000211-b2d1-43f0-9b88-960cebf8b91e
 UUID: 00000212-b2d1-43f0-9b88-960cebf8b91e
@@ -165,7 +174,9 @@ print(prependedMsg.hex(" "))
 </details>
 
 ### Vehicle BLE Name
+
 The vehicle's BLE name is fairly easy to figure out. You need to do the following to get the whole name except the last character:
+
 - Get the vehicle's VIN, we'll call this `vin`
 - Get a SHA1 hash of it, we'll call this `vinSHA`
 - Get the `vinSHA` as a hex string, and keep only the first 16 characters, we'll call this `middleSection`
@@ -214,6 +225,7 @@ The vehicle will always respond with a `FromVCSECMessage` message.
 The first two bytes of this message represent the length of the message.
 
 The rest of the message can then be decoded. Below is an example response to a whilelist request:
+
 ```proto
 FromVCSECMessage {
 	commandStatus: CommandStatus {
@@ -221,12 +233,16 @@ FromVCSECMessage {
 	}
 }
 ```
+
 It should be received on the following indication characteristic:
+
 ```yaml
 Serivce: 00000211-b2d1-43f0-9b88-960cebf8b91e
 UUID: 00000213-b2d1-43f0-9b88-960cebf8b91e
 ```
+
 Now tap an existing key card, and you should recieve the following message:
+
 ```proto
 FromVCSECMessage {
 	commandStatus: CommandStatus {
@@ -243,6 +259,7 @@ FromVCSECMessage {
 	}
 }
 ```
+
 Congrats! You whitelisted your first key!
 
 <details>
@@ -296,6 +313,7 @@ if decodedMsg.commandStatus.whitelistOperationStatus.operationStatus == VCSEC.Op
 </details>
 
 ## Getting the ephemeral key
+
 To sign messages to send to the vehicle, you'll need to get the vehicle's ephemeral key.
 
 By definition of its name, this key should change every so often, but I never experienced it change in the many months of testing that I've done.
@@ -303,6 +321,7 @@ By definition of its name, this key should change every so often, but I never ex
 First, generate the `keyId`. This can be done by taking the first 4 bytes of a SHA1 digest of `publicKey`.
 
 Now that you have your `keyId`, you'll need to request the vehicle's ephemeral key. You can do this by making a `ToVCSECMessage` message with the following layout:
+
 ```proto
 ToVCSECMessage {
 	unsignedMessage: UnsignedMessage {
@@ -315,9 +334,11 @@ ToVCSECMessage {
 	}
 }
 ```
+
 Now, serialize this message to bytes as `getEphemeralBytes`. Prepend the message with `prependLength(getEphemeralBytes)`, and send the value to the vehicle.
 
 The vehicle should respond with a message in the ANSI X9.62/X9.63 Uncompressed Point format, with the NISTP256 format. When decoded, it should looks something like this:
+
 ```proto
 FromVCSECMessage {
 	sessionInfo: SessionInfo {
@@ -325,6 +346,7 @@ FromVCSECMessage {
 	}
 }
 ```
+
 Now that you have the `ephemeralKey`, generate an AES secret from the `ephemeralKey` and your secret key. Next, make a SHA1 of it, and put take the first 16 bytes to form your `sharedKey`.
 
 <details>
@@ -433,10 +455,12 @@ print(sharedKey.hex(' '))
 </details>
 
 ## Authenticating
+
 :::warning
-Due to Tesla's implementation of message signing, you are *required* to use a 4 byte long nonce, which is a problem as it might be deemed insecure by some libraries (such as the one in the example of this section), and they must be modified to remove the limit, or the encryption must be done without a library if that such a modified library is not available.
+Due to Tesla's implementation of message signing, you are _required_ to use a 4 byte long nonce, which is a problem as it might be deemed insecure by some libraries (such as the one in the example of this section), and they must be modified to remove the limit, or the encryption must be done without a library if that such a modified library is not available.
 :::
 For the vehicle to know that you are connected and to be able to send/receive messages, you need to generate an authentication message in the following format:
+
 ```proto
 UnsignedMessage {
 	authenticationResponse: AuthenticationResponse {
@@ -444,6 +468,7 @@ UnsignedMessage {
 	}
 }
 ```
+
 Set a variable called `counter` to 1 which can be any unsigned 32 bit number (must match the rule `counter >= 1 and counter <= 4294967295`), and must be greater than the last used counter otherwise the car won't accept it. You must change the counter after each use.
 
 Now, you need to encrypt this message using the `sharedKey` with AES128 encryption in GCM mode, with a nonce of the `counter`, split into 4 bytes in big-endian, where the least significant (smaller in value) byte is at the end.
@@ -455,6 +480,7 @@ We'll call this `encryptedMsgWithTag` as it has a signature tag that we'll need 
 You should separate the encrypted/signed message into 2 variables, `encryptedMsg` (from byte `0` to `encryptedMsgWithTag.length - 16`), and `msgSignature` (from byte `encryptedMsgWithTag.length - 16` to `encryptedMsgWithTag.length`).
 
 Now you can send the message to the vehicle! Use the following format:
+
 ```proto
 ToVCSECMessage {
 	signedMessage: SignedMessage {
@@ -465,6 +491,7 @@ ToVCSECMessage {
 	}
 }
 ```
+
 Now, prepare the message by serializing and prepending the length of the message. It is now ready to be sent to the vehicle!
 
 Once complete, as long as you stay connected to the vehicle's BLE, your key will stay marked in the vehicle as an active key.
@@ -571,9 +598,11 @@ print(msg.hex(" "))
 </details>
 
 ## Authenticating for other things
-If you want to let the vehicle do things automatically without sending messages to do things (i.e. like the Tesla App does when you're next to/inside the vehicle), you can send it an authentication response of a higher level to give permission to do everything under and including that level, so say `level = 'UNLOCK'`, you are only letting the vehicle unlock, but say you do `level = 'DRIVE'`, you can unlock *or* drive. Also, everytime the vehicle does something automatically, the vehicle resets level to `NONE`.
+
+If you want to let the vehicle do things automatically without sending messages to do things (i.e. like the Tesla App does when you're next to/inside the vehicle), you can send it an authentication response of a higher level to give permission to do everything under and including that level, so say `level = 'UNLOCK'`, you are only letting the vehicle unlock once, but say you do `level = 'DRIVE'`, you can unlock _or_ drive once, not both. Also, everytime the vehicle does something automatically, the vehicle resets level to `NONE`.
 
 All that you have to do is serialize and sign an auth message where the distance is optional, but if not sent to the vehicle, it will just automatically assume that you're next to/inside the vehicle:
+
 ```proto
 UnsignedMessage {
 	AuthenticationResponse: AuthenticationResponse {
@@ -582,7 +611,9 @@ UnsignedMessage {
 	}
 }
 ```
+
 Once you sign that message, I'll call it `signedAuthMsg`, and its signature `signedAuthSign`, and turn it into a ToVCSECMessage message like this, which you then serialize, prepend the length, and send to the vehicle:
+
 ```proto
 ToVCSECMessage {
 	signedMessage: SignedMessage {
@@ -596,6 +627,7 @@ ToVCSECMessage {
 
 :::note
 I recommend only changing this to other auth levels when the car requests it. Here's an example of a message you may get from the car, requesting to unlock it (yes I know this says drive, but that's just how it is):
+
 ```proto
 FromVCSECMessage {
 	authenticationRequest: AuthenticationRequest {
@@ -606,7 +638,9 @@ FromVCSECMessage {
 	}
 }
 ```
+
 In this case you'll just send the car back the following message:
+
 ```proto
 UnsignedMessage {
 	AuthenticationResponse: AuthenticationResponse {
@@ -614,7 +648,8 @@ UnsignedMessage {
 	}
 }
 ```
-Don't worry about the walk-away car lock, when you walk away the car will automatically lock, although I believe in the newer VCSEC version you send the RKE action `RKE_ACTION_AUTO_SECURE_VEHICLE`, in case you want the car to lock automatically (and auto-close the windows if that option is enabled as simply locking doesn't close them, so this would be prefered)
+
+Don't worry about the walk-away car lock, when you walk away the car will automatically lock based off the connection strength, although I believe in the newer VCSEC version you can send the RKE action `RKE_ACTION_AUTO_SECURE_VEHICLE`, in case you want the car to lock automatically (and auto-close the windows if that option is enabled as simply locking doesn't close them, so this would be prefered)
 :::
 
 <details>
@@ -736,119 +771,6 @@ print(msg.hex(" "))
 
 </details>
 
-## Sending manual actions
-Say a user interacts with an app or needs to do something that can't be done automatically. In that case you need to send an RKE action. You can send those by making a message in the following format, signing it, prepending length, and sending it to the vehicle like with any other signed message:
-```proto
-UnsignedMessage {
-	RKEAction: <any rke action>
-}
-```
-
-<details>
-<summary>Python Example</summary>
-
-```py
-import VCSEC
-from cryptography.hazmat.primitives.ciphers.aead import AESGCM
-from cryptography.hazmat.primitives.asymmetric import ec
-from cryptography.hazmat.primitives import hashes, serialization
-
-# Function to prepend message length
-def prependLength(message):
-    return (len(message).to_bytes(2, 'big') + message)
-
-try:
-    # Try to open and import private key
-    privKeyFile = open('private_key.pem', 'rb')
-    privateKey = serialization.load_pem_private_key(privKeyFile.read(), None)
-    privKeyFile.close()
-except FileNotFoundError:
-    # If private key file not found, generate private keys
-    privKeyFile = open('private_key.pem', 'wb')
-    privateKey = ec.generate_private_key(ec.SECP256R1())
-    privKeyFile.write(privateKey.private_bytes(serialization.Encoding.PEM, serialization.PrivateFormat.PKCS8, serialization.NoEncryption()))
-    privKeyFile.close()
-
-# Derive public key in X9.62 Uncompressed Point Encoding
-publicKey = privateKey.public_key().public_bytes(serialization.Encoding.X962, serialization.PublicFormat.UncompressedPoint)
-
-# Hash our public key to get our key id and extract the first 4 bytes
-digest = hashes.Hash(hashes.SHA1())
-digest.update(publicKey)
-keyId = digest.finalize()[:4]
-
-# Example Ephemeral Key
-ephemeralKey = b'\x04\x79\xc0\x50\x4a\x21\x6f\xfc\x26\x46\xb7\x57\x80\x39\x9f\x1c\xe1\x23\xf4\x01\x56\x1b\x68\x5c\x31\x83\x64\xfa\x96\xcc\x3f\xe6\x7a\x5a\xc5\x04\x8c\x44\x7a\xf8\x8d\x91\x52\x86\x5a\x1e\xfc\x15\xbb\xd5\x68\x98\xdd\x2c\x46\xf7\xa1\x9b\xad\x4f\xb2\x80\x52\xc4\x60'
-
-# Put the known curve of the key into a variable
-curve = ec.SECP256R1()
-# Use the curve to put the ephemeral key into a workable format
-ephemeralKey = ec.EllipticCurvePublicKey.from_encoded_point(curve, ephemeralKey)
-# Prepare a hasher
-hasher = hashes.Hash(hashes.SHA1())
-# Derive an AES secret from our private key and the car's public key
-aesSecret = privateKey.exchange(ec.ECDH(), ephemeralKey)
-# Put the AES secret into the hasher
-hasher.update(aesSecret)
-# Put the first 16 bytes of the hash into a shared key variable
-sharedKey = hasher.finalize()[:16]
-
-# Put an rke action on an unsigned message and serialize it
-# It will technically be empty, but the default action is to unlock the car as there is nothing else on the unsigned message
-unsignedMessage = VCSEC.UnsignedMessage()
-unsignedMessage.RKEAction = VCSEC.RKEAction_E.RKE_ACTION_UNLOCK
-unsignedMessageS = unsignedMessage.SerializeToString()
-
-# Print out the unsigned message layout for information purposes
-print("Unsigned Message Layout:")
-print(unsignedMessage)
-
-# Set counter to 3 and create a nonce from it
-counter = 3
-nonce = int.to_bytes(counter, 4, "big")
-
-# Initialize an AES encryptor in GCM mode and encrypt the message using it
-encryptor = AESGCM(sharedKey)
-# This will error out if you're using the latest version of the cryptorgraphy.io library as I'm using a 4 byte long nonce
-try:
-    encryptedMsgWithTag = encryptor.encrypt(nonce, unsignedMessageS, None)
-except ValueError:
-    print("Error: The cryptography.io library doesn't allow nonces as small as 4 bytes anymore. Please modify the if statement in the _check_params(nonce, data, associated_date) function in the cryptography.hazmat.primitives.ciphers.aead.AESGCM class to require the minimum length to be 1")
-    exit()
-
-# Put all of this onto a "signed message" variable
-signedMessage = VCSEC.SignedMessage()
-signedMessage.protobufMessageAsBytes = encryptedMsgWithTag[:-16]
-signedMessage.counter = counter
-signedMessage.signature = encryptedMsgWithTag[-16:]
-signedMessage.keyId = keyId
-
-# Put all of this onto a "to vcsec" message
-toVCSECMessage = VCSEC.ToVCSECMessage()
-toVCSECMessage.signedMessage.CopyFrom(signedMessage)
-
-# Print it out for information purposes
-print("\nTo VCSEC Message Layout:")
-print(toVCSECMessage)
-
-# Serialize the message and prepend the length
-msg = toVCSECMessage.SerializeToString()
-msg = prependLength(msg)
-
-# Print the message to be sent to the car
-print("\nRKE Action Message To Send To Car:")
-print(msg.hex(" "))
-```
-
-</details>
-
 ## More Info
-For more info, you can begin looking at [ToVCSECMessage](tovcsec) ([UnsignedMessage](other/unsignedmsg) in particular) to see things you can send to the car, and [FromVCSECMessage](fromvcsec) to see things you receive from the car.
 
-Don't forget, VCSEC is the vehicle's secondary security system, so you send `ToVCSECMessage` messages, and the vehicle sends you back `FromVCSECMessage` messages.
-
-:::note
-There is only one exception to this rule: when you added your key as keyfob. In this case you would use `FromKeyfobMessage` instead of `ToVCSECMessage`, and `ToKeyfobMessage` instead of `FromVCSECMessage`. Those are just subsets of each other and are therefore basically equal.
-
-There is also an exception for tire pressure sensors, but I have absolutely no idea of how they work, and don't have time to research.
-:::
+For more info, you can look at the VCSEC file directly (UnsignedMessage and FromVCSECMessage contain all the fun stuff), or you can look at "More Stuff" in the sidebar.
