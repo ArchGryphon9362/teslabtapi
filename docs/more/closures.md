@@ -12,7 +12,7 @@ Tesla has a messages dedicated to moving closures such as the doors, the frunk, 
 
 Just like any other message, this is put inside a `UnsignedMessage` message, signed, and sent off to the vehicle
 
-Here's an example of a message used to open the passenger door (only unlatches on non-Model X vehicles), and close the trunk (only on vehicles with powered liftgate) at the same time:
+Here's an example of a message used to open the passenger door (opens completely on Model X vehicles, unlatches on non Model X vehicles), and close the trunk (only on vehicles with powered liftgate) at the same time:
 
 ```proto
 UnsignedMessage {
