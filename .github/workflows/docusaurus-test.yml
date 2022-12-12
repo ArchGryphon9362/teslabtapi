@@ -5,7 +5,7 @@ name: Doucsaurus Test Build
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [main]
     paths:
       - docs/**
       - src/**
@@ -13,10 +13,10 @@ on:
       - babel.config.js
       - docusaurus.config.js
       - sidebars.js
+      - package.json
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -25,14 +25,14 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - name: build
-      run: |
-        npm install
-        yarn install
-        yarn build
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+      - name: build
+        run: |
+          npm install
+          yarn install
+          yarn build
