@@ -5008,10 +5008,10 @@
     "unified" "^9.0.0"
     "unist-util-is" "^4.0.2"
 
-"docusaurus-plugin-ackee-improved@^0.0.1":
-  "integrity" "sha512-1BQ5kklFywBvRyT47R37H1PHDQ++aMThXdquTjlxY9Q07ru/yb1xrsCU7Jxg3BpFqBDepbHDsBGNnEALKLkyaA=="
-  "resolved" "https://registry.npmjs.org/docusaurus-plugin-ackee-improved/-/docusaurus-plugin-ackee-improved-0.0.1.tgz"
-  "version" "0.0.1"
+"docusaurus-plugin-ackee-improved@^0.0.2":
+  "integrity" "sha512-9If7T+pLuR0ultFFMLPc7w6bvwKmyhEr1RKxPoLGWkNcwsZIO9cLIKlnHksc4mIoQQo8TCUviK+32j/7XBlGmQ=="
+  "resolved" "https://registry.npmjs.org/docusaurus-plugin-ackee-improved/-/docusaurus-plugin-ackee-improved-0.0.2.tgz"
+  "version" "0.0.2"
 
 "dom-converter@^0.2.0":
   "integrity" "sha512-gd3ypIPfOMr9h5jIKq8E3sHOTCjeirnl0WK5ZdS1AW0Odt0b1PaWaHdJ4Qk4klv+YB9aJBS7mESXjFoDQPu6DA=="
