@@ -106,6 +106,11 @@ module.exports = {
           position: "left",
         },
         {
+          href: "https://ko-fi.com/lexnastin",
+          label: "Donate",
+          position: "right"
+        },
+        {
           href: "https://github.com/ArchGryphon9362/teslabtapi",
           label: "GitHub",
           position: "right",
