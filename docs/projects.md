@@ -24,6 +24,9 @@ sidebar_position: 5
 - [Watch App For Tesla](https://www.watchfortesla.com/) - Convenience on the wrist - Watch for Tesla is the ideal companion in day to day life with your Tesla vehicle.
   - `Creator` - Kim Hansen
   - `Devices` - iOS, Apple Watch
+- [XIAOTE keyfob](https://apps.apple.com/ie/app/xiaote-keyfob/id1658579911) - Xiatoe Keyfob (Tesla Key Fob for Apple Watch) functions just like the official Tesla key fob, which only requires Bluetooth for full functionality. No internet or Tesla login required.
+  - `Creator` - Xiaote Technology
+  - `Devices` - Apple Watch
 
 ## Python Libraries
 
