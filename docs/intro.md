@@ -28,4 +28,6 @@ Next generate the source/header files for your respective language ([see this pa
 
 To begin, go to the [getting started](start) section.
 
-If you want to contribute, just message me on Discord (ArchGryphon9362#6132), or submit a PR/issue.
+Please consider donating over at [my Ko-fi page](https://ko-fi.com/lexnastin) if you like my work. Any amount appreciated!
+
+If you want to contribute, just message me on [the Discord server](discord), or submit a PR/issue.
