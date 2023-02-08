@@ -102,6 +102,11 @@ module.exports = {
         },
         {
           href: "https://www.lexnastin.com",
+          label: "Home",
+          position: "left",
+        },
+        {
+          href: "https://blog.lexnastin.com",
           label: "Blog",
           position: "left",
         },
