@@ -3,8 +3,11 @@ sidebar_position: 3
 ---
 
 # BLE Information
+
 ## Name
+
 The vehicle's BLE name is found using the following method (doesn't give last character):
+
 - Get the vehicle's VIN, we'll call this `vin`
 - Get a SHA1 hash of it, we'll call this `vinSHA`
 - Get the `vinSHA` as a hex string, and keep only the first 16 characters, we'll call this `middleSection`
@@ -36,12 +39,15 @@ print(bleName) # Sa6bab0d54ffaecf1C
 </details>
 
 ## Services
-Service|Description
--|-
-`00000211-b2d1-43f0-9b88-960cebf8b91e`|The main service which the car uses for all communication
+
+| Service                                | Description                                                   |
+| -------------------------------------- | ------------------------------------------------------------- |
+| `00000211-b2d1-43f0-9b88-960cebf8b91e` | The main service which the vehicle uses for all communication |
 
 ## Characteristics
-### Send messages to the car
+
+### Send messages to the vehicle
+
 ```yaml
 - UUID: 00000212-b2d1-43f0-9b88-960cebf8b91e
 - Properties: WRITE
@@ -49,7 +55,8 @@ Service|Description
     - 0x2901 — Characteristic Description
 ```
 
-### Recieve messages from the car
+### Recieve messages from the vehicle
+
 ```yaml
 - UUID: 00000213-b2d1-43f0-9b88-960cebf8b91e
 - Properties: INDICATE
@@ -59,6 +66,7 @@ Service|Description
 ```
 
 ### Get communication version
+
 ```yaml
 - UUID: 00000214-b2d1-43f0-9b88-960cebf8b91e
 - Properties: READ

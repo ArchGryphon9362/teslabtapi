@@ -65,7 +65,7 @@ curve = ec.SECP256R1()
 ephemeralKey = ec.EllipticCurvePublicKey.from_encoded_point(curve, ephemeralKey)
 # Prepare a hasher
 hasher = hashes.Hash(hashes.SHA1())
-# Derive an AES secret from our private key and the car's public key
+# Derive an AES secret from our private key and the vehicle's public key
 aesSecret = privateKey.exchange(ec.ECDH(), ephemeralKey)
 # Put the AES secret into the hasher
 hasher.update(aesSecret)
@@ -118,8 +118,8 @@ print(toVCSECMessage)
 msg = toVCSECMessage.SerializeToString()
 msg = prependLength(msg)
 
-# Print the message to be sent to the car
-print("\nClosure Move Request Message To Send To Car:")
+# Print the message to be sent to the vehicle
+print("\nClosure Move Request Message To Send To Vehicle:")
 print(msg.hex(" "))
 ```
 

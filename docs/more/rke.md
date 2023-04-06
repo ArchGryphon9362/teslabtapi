@@ -6,11 +6,11 @@ sidebar_position: 1
 
 ## Some Information
 
-The basic actions in Tesla vehicles are called RKE actions - Remote Keyless Entry Actions in other word. They can do some simple things like opening the trunk or frunk, or even locking and unlocking the car.
+The basic actions in Tesla vehicles are called RKE actions - Remote Keyless Entry Actions in other word. They can do some simple things like opening the trunk or frunk, or even locking and unlocking the vehicle.
 
 ## Structure
 
-RKE Actions are regular old `UnsignedMessage` messages, signed and sent off to the car.
+RKE Actions are regular old `UnsignedMessage` messages, signed and sent off to the vehicle.
 
 Here's an example of an unlock message:
 
@@ -62,7 +62,7 @@ curve = ec.SECP256R1()
 ephemeralKey = ec.EllipticCurvePublicKey.from_encoded_point(curve, ephemeralKey)
 # Prepare a hasher
 hasher = hashes.Hash(hashes.SHA1())
-# Derive an AES secret from our private key and the car's public key
+# Derive an AES secret from our private key and the vehicle's public key
 aesSecret = privateKey.exchange(ec.ECDH(), ephemeralKey)
 # Put the AES secret into the hasher
 hasher.update(aesSecret)
@@ -110,8 +110,8 @@ print(toVCSECMessage)
 msg = toVCSECMessage.SerializeToString()
 msg = prependLength(msg)
 
-# Print the message to be sent to the car
-print("\nRKE Action Message To Send To Car:")
+# Print the message to be sent to the vehicle
+print("\nRKE Action Message To Send To Vehicle:")
 print(msg.hex(" "))
 ```
 

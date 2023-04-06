@@ -7,10 +7,10 @@ sidebar_position: 2
 import ReactSpoiler from "react-spoiler";
 
 :::note
-Tesla has updated their VCSEC for the new Model S and X, among other things. The current stuff (in the getting started guide) should continue to work as always, just there are more messages being sent in the later versions, such as Alerts and stuff, so be sure to keep your VCSEC.proto file up to date. Also, since the car uses 4 byte nonces many libraries will deem this as insecure and won't allow you to do that, and after checking out the new Tesla app, sadly the problem still exists and you must modify these libraries to work with the car :/
+Tesla has updated their VCSEC for the new Model S and X, among other things. The current stuff (in the getting started guide) should continue to work as always, just there are more messages being sent in the later versions, such as Alerts and stuff, so be sure to keep your VCSEC.proto file up to date. Also, since the vehicle uses 4 byte nonces many libraries will deem this as insecure and won't allow you to do that, and after checking out the new Tesla app, sadly the problem still exists and you must modify these libraries to work with the vehicle :/
 :::
 :::tip
-I really recommend reading this over to grasp an understanding of how this stuff works. If you just want to see what the car can do, skip down to [more info](#more-info).
+I really recommend reading this over to grasp an understanding of how this stuff works. If you just want to see what the vehicle can do, skip down to [more info](#more-info).
 :::
 
 ## Whitelisting your key
@@ -166,8 +166,8 @@ authMsg = toVCSECMessage.SerializeToString()
 # Prepend the length to our message
 prependedMsg = prepend_length(authMsg)
 
-# Print the final message needed to send to car
-print("\nFinal Message To Send To Car:")
+# Print the final message needed to send to vehicle
+print("\nFinal Message To Send To Vehicle:")
 print(prependedMsg.hex(" "))
 ```
 
@@ -285,9 +285,9 @@ else:
 decodedMsg = VCSEC.FromVCSECMessage()
 decodedMsg.ParseFromString(exampleMsgRcvd[2:])
 
-# Check If The Car Is Telling Us To Wait For Something To Happen (the keycard getting tapped in this case)
+# Check If The Vehicle Is Telling Us To Wait For Something To Happen (the keycard getting tapped in this case)
 if decodedMsg.commandStatus.operationStatus == VCSEC.OperationStatus_E.OPERATIONSTATUS_WAIT:
-    print("Car Asking To Tap Key Card!")
+    print("Vehicle Asking To Tap Key Card!")
 
 # Key Card Tapped Example Message
 exampleKCTappedMsgRcvd = b'\x00\x0c\x22\x0a\x1a\x08\x12\x06\x0a\x04\x5f\x0d\x64\xb3'
@@ -440,7 +440,7 @@ curve = ec.SECP256R1()
 ephemeralKey = ec.EllipticCurvePublicKey.from_encoded_point(curve, ephemeralKey)
 # Prepare a hasher
 hasher = hashes.Hash(hashes.SHA1())
-# Derive an AES secret from our private key and the car's public key
+# Derive an AES secret from our private key and the vehicle's public key
 aesSecret = privateKey.exchange(ec.ECDH(), ephemeralKey)
 # Put the AES secret into the hasher
 hasher.update(aesSecret)
@@ -469,7 +469,7 @@ UnsignedMessage {
 }
 ```
 
-Set a variable called `counter` to 1 which can be any unsigned 32 bit number (must match the rule `counter >= 1 and counter <= 4294967295`), and must be greater than the last used counter otherwise the car won't accept it. You must change the counter after each use.
+Set a variable called `counter` to 1 which can be any unsigned 32 bit number (must match the rule `counter >= 1 and counter <= 4294967295`), and must be greater than the last used counter otherwise the vehicle won't accept it. You must change the counter after each use.
 
 Now, you need to encrypt this message using the `sharedKey` with AES128 encryption in GCM mode, with a nonce of the `counter`, split into 4 bytes in big-endian, where the least significant (smaller in value) byte is at the end.
 
@@ -538,7 +538,7 @@ curve = ec.SECP256R1()
 ephemeralKey = ec.EllipticCurvePublicKey.from_encoded_point(curve, ephemeralKey)
 # Prepare a hasher
 hasher = hashes.Hash(hashes.SHA1())
-# Derive an AES secret from our private key and the car's public key
+# Derive an AES secret from our private key and the vehicle's public key
 aesSecret = privateKey.exchange(ec.ECDH(), ephemeralKey)
 # Put the AES secret into the hasher
 hasher.update(aesSecret)
@@ -590,8 +590,8 @@ print(toVCSECMessage)
 msg = toVCSECMessage.SerializeToString()
 msg = prependLength(msg)
 
-# Print the message to be sent to the car
-print("\nAuth Message To Send To Car:")
+# Print the message to be sent to the vehicle
+print("\nAuth Message To Send To Vehicle:")
 print(msg.hex(" "))
 ```
 
@@ -626,7 +626,7 @@ ToVCSECMessage {
 ```
 
 :::note
-I recommend only changing this to other auth levels when the car requests it. Here's an example of a message you may get from the car, requesting to unlock it (yes I know this says drive, but that's just how it is):
+I recommend only changing this to other auth levels when the vehicle requests it. Here's an example of a message you may get from the vehicle, requesting to unlock it (yes I know this says drive, but that's just how it is):
 
 ```proto
 FromVCSECMessage {
@@ -639,7 +639,7 @@ FromVCSECMessage {
 }
 ```
 
-In this case you'll just send the car back the following message:
+In this case you'll just send the vehicle back the following message:
 
 ```proto
 UnsignedMessage {
@@ -649,7 +649,7 @@ UnsignedMessage {
 }
 ```
 
-Don't worry about the walk-away car lock, when you walk away the car will automatically lock based off the connection strength, although I believe in the newer VCSEC version you can send the RKE action `RKE_ACTION_AUTO_SECURE_VEHICLE`, in case you want the car to lock automatically (and auto-close the windows if that option is enabled as simply locking doesn't close them, so this would be prefered)
+Don't worry about the walk-away auto-lock, when you walk away the vehicle will automatically lock based off the connection strength (or if the bluetooth disconnects), although I believe in the newer VCSEC version you can send the RKE action `RKE_ACTION_AUTO_SECURE_VEHICLE`, in case you want the vehicle to lock automatically (and auto-close the windows if that option is enabled as simply locking doesn't close them, so this would be prefered)
 :::
 
 <details>
@@ -694,7 +694,7 @@ curve = ec.SECP256R1()
 ephemeralKey = ec.EllipticCurvePublicKey.from_encoded_point(curve, ephemeralKey)
 # Prepare a hasher
 hasher = hashes.Hash(hashes.SHA1())
-# Derive an AES secret from our private key and the car's public key
+# Derive an AES secret from our private key and the vehicle's public key
 aesSecret = privateKey.exchange(ec.ECDH(), ephemeralKey)
 # Put the AES secret into the hasher
 hasher.update(aesSecret)
@@ -764,8 +764,8 @@ print(toVCSECMessage)
 msg = toVCSECMessage.SerializeToString()
 msg = prependLength(msg)
 
-# Print the message to be responded to the car with
-print("\nAuth Message To Send To Car:")
+# Print the message to be responded to the vehicle with
+print("\nAuth Message To Send To Vechile:")
 print(msg.hex(" "))
 ```
 

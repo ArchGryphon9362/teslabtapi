@@ -16,7 +16,7 @@ For more info on how to use the Tesla REST API, please visit [timdorr's docs](ht
 
 You might want to give the key you have just added a name and a model, and possibly include your product's name in one of the 2. This is possible through the REST API. It can be done as many times as needed and will be updated in the vehicle whenever the "Locks" menu is opened.
 
-Warning though, once the name is set, the user will no longer be able to change it inside the car UI, so preferably set it to something meaningful, and give the user the option to modify it somehow.
+Warning though, once the name is set, the user will no longer be able to change it inside the vehicle UI, so preferably set it to something meaningful, and give the user the option to modify it somehow.
 
 ## What to send
 
@@ -44,7 +44,7 @@ Set the `Authorization` and `Content-Type` header, as per usual with Tesla's RES
 
 ### Finishing up
 
-Send all of this over to `https://owner-api.teslamotors.com/api/1/users/keys`, and once you reenter the "Locks" menu in the car, you should now see the updated info for the key!
+Send all of this over to `https://owner-api.teslamotors.com/api/1/users/keys`, and once you reenter the "Locks" menu in the vehicle, you should now see the updated info for the key!
 
 ## Key Kinds
 

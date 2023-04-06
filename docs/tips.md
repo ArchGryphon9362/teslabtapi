@@ -10,7 +10,7 @@ In most systems, when they receive a BLE indication, they lock the BLE thread so
 
 To avoid this, my recommendation is to create a queue array of messages to send, and then send them one by one **after** the callback.
 
-## Check That Key Is Added To Car
+## Check That Key Is Added To Vehicle
 
 Whenever you connect to the vehicle, you should check whether your key id, is in the list of added keys, and if not, you should start the key adding flow inside your program. This ensures that your app doesn't get confused in case the key got removed by the user.
 
