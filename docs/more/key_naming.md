@@ -31,7 +31,7 @@ Warning though, once the name is set, the user will no longer be able to change 
 }
 ```
 
-| Key          | Is required? | Description                                                                                                          |
+| Option       | Is required? | Description                                                                                                          |
 | ------------ | ------------ | -------------------------------------------------------------------------------------------------------------------- |
 | `kind`       | `required`   | Must be set to `mobile_device` (more values possibly exist, but are unknown)                                         |
 | `public_key` | `required`   | Must be set the hex representation of the public key as encoded in [Getting Started](../start#whitelisting-your-key) |
@@ -45,3 +45,12 @@ Set the `Authorization` and `Content-Type` header, as per usual with Tesla's RES
 ### Finishing up
 
 Send all of this over to `https://owner-api.teslamotors.com/api/1/users/keys`, and once you reenter the "Locks" menu in the car, you should now see the updated info for the key!
+
+## Key Kinds
+
+Currently known values:
+
+| Kind            | Description                                                                                                                       |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `mobile_device` | A `mobile_device` must be added over BLE for this kind to work, and should be used for phones and alike                           |
+| `key_card`      | A `key_card` must be added over NFC to work, and should be used for thing like key cards and others, that communicate through NFC |
