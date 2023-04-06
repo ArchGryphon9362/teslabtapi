@@ -74,7 +74,7 @@ module.exports = {
         ],
       },
     ],
-    [
+    /*  [
       "docusaurus-plugin-ackee-improved",
       {
         domainId: "c21a18c1-4e62-485b-9eb4-a40feebb5164",
@@ -84,7 +84,7 @@ module.exports = {
         ignoreOwnVisits: true,
         ackeeTracerFile: "tracer.js",
       },
-    ],
+    ], */
   ],
   themeConfig: {
     navbar: {
@@ -113,7 +113,7 @@ module.exports = {
         {
           href: "https://ko-fi.com/lexnastin",
           label: "Donate",
-          position: "right"
+          position: "right",
         },
         {
           href: "https://github.com/ArchGryphon9362/teslabtapi",
