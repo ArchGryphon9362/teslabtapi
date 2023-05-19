@@ -22,7 +22,8 @@ Using most of the following information requires knowledge in the following area
 - Storing private keys securely
 - Bluetooth Low-Energy (BLE)
 - Google protocol buffers (protobuf)
-  :::
+
+:::
 
 ## Get started
 
