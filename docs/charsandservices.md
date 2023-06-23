@@ -8,7 +8,7 @@ sidebar_position: 3
 
 ### New Name
 
-Tesla has recently (as of 21/June/2023) began using a new Bluetooth naming scheme. It is pretty easy to get. You take the last 6 digits of the vehicle's VIN and append them to the word `Tesla`.
+Tesla has recently (as of 21/June/2023) began using a new Bluetooth naming scheme. It is pretty easy to get. You take the last 6 characters of the vehicle's VIN and append them to the word `Tesla`.
 
 So if the VIN is `5YJ3E1EA1KF130307`, the Bluetooth name will be `Tesla 130307`.
 
@@ -18,7 +18,7 @@ Some have mentioned that the old name could still be broadcasted alongside the n
 
 ### Old Name
 
-The vehicle's BLE name is found using the following method (doesn't give last character):
+The vehicle's BLE name is found using the following method:
 
 - Get the vehicle's VIN, we'll call this `vin`
 - Get a SHA1 hash of it, we'll call this `vinSHA`

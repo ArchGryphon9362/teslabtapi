@@ -175,12 +175,18 @@ print(prependedMsg.hex(" "))
 
 ### Vehicle BLE Name
 
-The vehicle's BLE name is fairly easy to figure out. You need to do the following to get the whole name except the last character:
+As of some updates, Tesla has changed the way names are advertised. To find the car's name with the new system, you simply append the last 6 characters of the VIN to the word `Tesla`
+
+For example, if the VIN is `5YJ3E1EA1KF130307`, the VIN is `Tesla 130307`.
+
+Just in case, you should also look out for the old naming, as some have reported it alternating between the 2.
+
+To find out the old way of the naming, do the following:
 
 - Get the vehicle's VIN, we'll call this `vin`
 - Get a SHA1 hash of it, we'll call this `vinSHA`
 - Get the `vinSHA` as a hex string, and keep only the first 16 characters, we'll call this `middleSection`
-- Prepend "S" to `middleSection` and that is it. We're not sure how to find the last character yet, but you don't have to pay attention to that
+- Prepend "S" to middleSection and that is it. The last character is usually C
 - All that is currently known about the last letter is that it must be one of the following:
   - C
   - R
