@@ -7,10 +7,17 @@ sidebar_position: 2
 import ReactSpoiler from "react-spoiler";
 
 :::note
-Tesla has updated their VCSEC for the new Model S and X, among other things. The current stuff (in the getting started guide) should continue to work as always, just there are more messages being sent in the later versions, such as Alerts and stuff, so be sure to keep your VCSEC.proto file up to date. Also, since the vehicle uses 4 byte nonces many libraries will deem this as insecure and won't allow you to do that, and after checking out the new Tesla app, sadly the problem still exists and you must modify these libraries to work with the vehicle :/
+Tesla using an irregular nonce size of 4 bytes. Cryptographically, this isn’t a major problem, but many libraries won’t let you use that exact nonce size, so be sure to choose accordingly. No, you can't just change the nonce size. The resulting message will be different.
 :::
 :::tip
 I really recommend reading this over to grasp an understanding of how this stuff works. If you just want to see what the vehicle can do, skip down to [more info](#more-info).
+:::
+:::note
+In case you don’t own a Tesla yet, are just here out of curiousity, and are planning on buying one, you can show your support by buying with [my Tesla referral link](https://ts.la/nadiya73350). You'll even get some benefits!
+
+On the other hand, if you do already own a Tesla, you can support my work by [getting me a Ko-fi](https://ko-fi.com/lexnastin). Thanks!
+
+Now onto the actual content:
 :::
 
 ## Whitelisting your key
