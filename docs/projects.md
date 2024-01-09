@@ -28,11 +28,11 @@ sidebar_position: 5
   - `Creator` - Xiaote Technology
   - `Devices` - Apple Watch
 
-## Python Libraries
+## Libraries
 
-- [pyteslable](https://pypi.org/project/pyteslable/) - Library with easy to use wrappers for controlling your Tesla vehicle.
+- [pyteslable](https://pypi.org/project/pyteslable/) (Python)- Library with easy to use wrappers for controlling your Tesla vehicle.
   - `Creators` - kaedenb + ArchGryphon9362
-- [CPPTeslaBLE](https://github.com/pmdroid/tesla-ble) - CPP library facilitates direct communication with Tesla vehicles via the BLE API.
+- [CPPTeslaBLE](https://github.com/pmdroid/tesla-ble) (C++) - CPP library facilitates direct communication with Tesla vehicles via the BLE API.
   - `Creators` - pmdroid
 
 ---
