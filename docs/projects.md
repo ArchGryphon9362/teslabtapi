@@ -32,6 +32,8 @@ sidebar_position: 5
 
 - [pyteslable](https://pypi.org/project/pyteslable/) - Library with easy to use wrappers for controlling your Tesla vehicle.
   - `Creators` - kaedenb + ArchGryphon9362
+- [CPPTeslaBLE](https://github.com/pmdroid/tesla-ble) - CPP library facilitates direct communication with Tesla vehicles via the BLE API.
+  - `Creators` - pmdroid
 
 ---
 
