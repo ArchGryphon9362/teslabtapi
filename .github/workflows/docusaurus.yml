@@ -45,4 +45,4 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ghcr.io/archgryphon9362/teslabtapi:latest
+          tags: ghcr.io/archgryphon9362/teslabtapi2:latest
