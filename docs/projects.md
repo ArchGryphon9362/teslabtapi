@@ -31,10 +31,10 @@ sidebar_position: 5
 ## Libraries
 
 - [pyteslable](https://pypi.org/project/pyteslable/) (Python)- Library with easy to use wrappers for controlling your Tesla vehicle.
-  - `Creators` - kaedenb + ArchGryphon9362
+  - `Creators` - kaedenb + Lex Nastin
 - [CPPTeslaBLE](https://github.com/pmdroid/tesla-ble) (C++) - CPP library facilitates direct communication with Tesla vehicles via the BLE API.
   - `Creators` - pmdroid
 
 ---
 
-If any of this info is inaccurate or you want your project added to this list, please contact me on Discord (ArchGryphon9362#6132), or submit a PR/issue.
+If any of this info is inaccurate or you want your project added to this list, please contact me (@LexNastin) or the reverser on Discord (@archgryphon9362), or submit a PR/issue.
