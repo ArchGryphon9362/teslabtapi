@@ -10,9 +10,9 @@ import ReactSpoiler from "react-spoiler";
 Tesla uses an irregular nonce size of 4 bytes. Cryptographically, this isn’t a major problem, but many libraries won’t let you use that exact nonce size, so be sure to choose one accordingly. No, you can't just change the nonce size. The resulting message will be different.
 :::
 :::note
-In case you don’t own a Tesla yet, are just here out of curiousity, and are planning on buying one, you can show your support by buying with [my Tesla referral link](https://ts.la/nadiya73350). You'll even get some benefits!
+In case you don’t own a Tesla yet, are just here out of curiousity, and are planning on buying one, you can show your support by buying with [our Tesla referral link](https://ts.la/nadiya73350). You'll even get some benefits!
 
-On the other hand, if you do already own a Tesla, you can support my work by [getting me a Ko-fi](https://ko-fi.com/lexnastin). Thanks!
+On the other hand, if you do already own a Tesla, you can support our work by [getting us a Ko-fi](https://ko-fi.com/archgryphon9362). Thanks!
 :::
 
 ## Whitelisting your key

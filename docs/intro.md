@@ -32,6 +32,8 @@ Next generate the source/header files for your respective language ([see this pa
 
 To begin, go to the [getting started](start) section.
 
-Please consider donating over at [my Ko-fi page](https://ko-fi.com/lexnastin) if you like my work. Any amount appreciated!
+## Extra Info
 
-If you want to contribute, just message me on [the Discord server](discord), or submit a PR/issue.
+This project was reversed mostly by ArchGryphon9362 and partially by me, Lex. It was documented entirely by me, Lex. Please consider donating over at [Arch's donation page](https://ko-fi.com/archgryphon9362) if you like our work. Any amount is appreciated and split fairly between us.
+
+If you want to contribute, just message us on [the Discord server](discord), or submit a PR/issue.
