@@ -81,8 +81,8 @@ print(prependedMsg) # b'\x00\x02\x01\x02'
 Once you have serialized `protoMsg`, and prepended the length, send the message to the vehicle over a normal BluetoothLE connection on the following write characteristic:
 
 ```yaml
-Service: 00000211-b2d1-43f0-9b88-960cebf8b91e
-Characteristic UUID: 00000212-b2d1-43f0-9b88-960cebf8b91e
+GATT Service UUID: 00000211-b2d1-43f0-9b88-960cebf8b91e
+GATT Characteristic UUID: 00000212-b2d1-43f0-9b88-960cebf8b91e
 ```
 
 <details>
@@ -245,8 +245,8 @@ FromVCSECMessage {
 It should be received on the following indication characteristic:
 
 ```yaml
-Service: 00000211-b2d1-43f0-9b88-960cebf8b91e
-Characteristic UUID: 00000213-b2d1-43f0-9b88-960cebf8b91e
+GATT Service UUID: 00000211-b2d1-43f0-9b88-960cebf8b91e
+GATT Characteristic UUID: 00000213-b2d1-43f0-9b88-960cebf8b91e
 ```
 
 Now tap an existing key card, and you should recieve the following message:
