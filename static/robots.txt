@@ -1,4 +1,4 @@
-Sitemap: https://teslabtapi.com/sitemap.xml
+Sitemap: https://www.teslabtapi.com/sitemap.xml
 
 User-agent: *
 Allow: /
