@@ -111,7 +111,7 @@ module.exports = {
           position: "left",
         },
         {
-          href: "https://ko-fi.com/lexnastin",
+          href: "https://ko-fi.com/archgryphon9362",
           label: "Donate",
           position: "right",
         },

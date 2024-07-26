@@ -34,6 +34,4 @@ To begin, go to the [getting started](start) section.
 
 ## Extra Info
 
-This project was reversed mostly by ArchGryphon9362 and partially by me, Lex. It was documented entirely by me, Lex. Please consider donating over at [Arch's donation page](https://ko-fi.com/archgryphon9362) if you like our work. Any amount is appreciated and split fairly between us.
-
 If you want to contribute, just message us on [the Discord server](discord), or submit a PR/issue.
