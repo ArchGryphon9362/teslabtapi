@@ -37,4 +37,4 @@ sidebar_position: 5
 
 ---
 
-If any of this info is inaccurate or you want your project added to this list, please contact me (@LexNastin) or the reverser on Discord (@archgryphon9362), or submit a PR/issue.
+If any of this info is inaccurate or you want your project added to this list, please submit a PR/issue.
