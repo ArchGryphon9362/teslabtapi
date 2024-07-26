@@ -5,7 +5,7 @@ const darkCodeTheme = require("prism-react-renderer/themes/dracula");
 module.exports = {
   title: "Tesla BluetoothLE API (Unofficial)",
   tagline: "The API documentation you've all been waiting for 😃",
-  url: "https://teslabtapi.lexnastin.com",
+  url: "https://www.teslabtapi.com",
   baseUrl: "/",
   trailingSlash: false,
   onBrokenLinks: "throw",
@@ -74,17 +74,6 @@ module.exports = {
         ],
       },
     ],
-    /*  [
-      "docusaurus-plugin-ackee-improved",
-      {
-        domainId: "c21a18c1-4e62-485b-9eb4-a40feebb5164",
-        server: "https://analytics.lexnastin.com",
-        detailed: true,
-        ignoreLocalhost: false,
-        ignoreOwnVisits: true,
-        ackeeTracerFile: "tracer.js",
-      },
-    ], */
   ],
   themeConfig: {
     navbar: {
@@ -101,13 +90,8 @@ module.exports = {
           label: "Tutorial",
         },
         {
-          href: "https://www.lexnastin.com",
+          href: "https://www.teslabtapi.com",
           label: "Home",
-          position: "left",
-        },
-        {
-          href: "https://blog.lexnastin.com",
-          label: "Blog",
           position: "left",
         },
         {
