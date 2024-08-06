@@ -7,7 +7,7 @@ sidebar_position: 1
 :::warning
 **This documentation is provided AS IS and without any warranty; anything that you do to your vehicle is FULLY YOUR RESPONSIBILITY, please DO NOT blame me for anything YOU do to your vehicle**.
 
-This documentation was fully researched, and written, by a single person, that is me. This documentation may have some slight inaccuracies, and this documentation may not be fully complete as I didn't have too much time to try out sending every message to my car, and had to guess some bits to write for the documentation.
+This documentation may have some slight inaccuracies, and this documentation may not be fully complete as I didn't have too much time to try out sending every message to my car, and had to guess some bits to write for the documentation.
 
 Everybody **_can_**, and is **_encouraged_** to clone this documentation's repository, modify any inaccurate bits, or add missing information, and create a pull request which will be reviewed and likely merged.
 
